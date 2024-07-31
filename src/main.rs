@@ -23,6 +23,7 @@ use redis::{Commands, RedisResult};
 use serde_json::json;
 
 use jsonwebtoken::{decode, Algorithm, DecodingKey, Validation};
+use mlua::prelude::*;
 use serde::{Deserialize, Serialize};
 
 mod api {
@@ -51,6 +52,8 @@ async fn main() {
     let app = app.route("/redis", get(redis));
 
     let app = app.route("/token", get(decode_token));
+
+    let app = app.route("/lua", get(use_lua));
 
     let app = app.route("/protobuf", get(protobuf));
 
@@ -143,4 +146,22 @@ async fn decode_token() -> String {
     println!("{:?}", data);
 
     data.claims.user_id
+}
+
+async fn use_lua() -> String {
+    let lua = Lua::new();
+
+    let map_table = lua.create_table().expect("create table failed");
+    map_table.set(1, "one").expect("set table failed");
+    map_table.set("two", 2).expect("set table failed");
+
+    lua.globals()
+        .set("map_table", map_table)
+        .expect("set global failed");
+
+    lua.load("for k,v in pairs(map_table) do print(k,v) end")
+        .exec()
+        .expect("load failed");
+
+    String::from("OK")
 }
