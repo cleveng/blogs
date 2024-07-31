@@ -1,5 +1,8 @@
 use axum::{
-    http::{header::HeaderName, header::HeaderValue, StatusCode},
+    http::{
+        header::{HeaderName, HeaderValue},
+        StatusCode,
+    },
     response::{IntoResponse, Response},
     routing::{get, post},
     Extension, Json, Router,
@@ -13,8 +16,16 @@ mod config;
 use config::{init_config, Config};
 
 mod graphql;
+use chrono::prelude::*;
 use graphql::{create_schema, graphql_handler};
-use redis::Commands;
+use redis::{Commands, RedisResult};
+use serde_json::json;
+
+mod repository {
+    pub mod redis;
+}
+
+use repository::redis::init_redis;
 
 #[tokio::main]
 async fn main() {
@@ -29,6 +40,8 @@ async fn main() {
 
     let app = Router::new().route("/", get(root));
 
+    let app = app.route("/redis", get(redis));
+
     let app = app
         .route("/graphql", post(graphql_handler))
         .layer(Extension(schema));
@@ -40,6 +53,26 @@ async fn main() {
     info!("the server is running,  url: http://{} ", addr);
 
     axum::serve(listener, app).await.unwrap();
+}
+
+async fn redis() -> impl IntoResponse {
+    let mut client = init_redis();
+    let now = Utc::now();
+
+    let _: RedisResult<()> = client.set("my_key", now.timestamp());
+    let value: RedisResult<i64> = client.get("my_key");
+
+    if let Ok(v) = value {
+        (
+            StatusCode::OK,
+            format!("get value from redis by key {}: {}", "my_key", v),
+        )
+    } else {
+        (
+            StatusCode::BAD_REQUEST,
+            format!("not found value from redis by key {}", "my_key"),
+        )
+    }
 }
 
 async fn root() -> &'static str {

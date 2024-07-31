@@ -1,4 +1,3 @@
-use redis::{Connection, RedisResult};
 use serde::Deserialize;
 use std::fs;
 
