@@ -25,6 +25,7 @@ use serde_json::json;
 use jsonwebtoken::{decode, Algorithm, DecodingKey, Validation};
 use mlua::prelude::*;
 use serde::{Deserialize, Serialize};
+use tokio_postgres::NoTls;
 
 mod api {
     pub mod person;
@@ -52,6 +53,8 @@ async fn main() {
     let app = app.route("/redis", get(redis));
 
     let app = app.route("/token", get(decode_token));
+
+    let app = app.route("/postgres", get(postgres));
 
     let app = app.route("/lua", get(use_lua));
 
@@ -164,4 +167,26 @@ async fn use_lua() -> String {
         .expect("load failed");
 
     String::from("OK")
+}
+
+async fn postgres() -> String {
+    let (client, connection) = tokio_postgres::connect(
+        "host=0.0.0.0 port=5432 user=homestead password=secret dbname=oa",
+        NoTls,
+    )
+    .await.expect("connect failed");
+
+    tokio::spawn(async move {
+        if let Err(e) = connection.await {
+            eprintln!("connection error: {}", e);
+        }
+    });
+
+    let rows = client
+        .query("SELECT id, name, app FROM accounts", &[])
+        .await.expect("query failed");
+
+    let value: &str = rows[0].get(2);
+
+    String::from(value)
 }
