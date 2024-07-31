@@ -22,6 +22,9 @@ use graphql::{create_schema, graphql_handler};
 use redis::{Commands, RedisResult};
 use serde_json::json;
 
+use jsonwebtoken::{decode, Algorithm, DecodingKey, Validation};
+use serde::{Deserialize, Serialize};
+
 mod api {
     pub mod person;
 }
@@ -46,6 +49,8 @@ async fn main() {
     let app = Router::new().route("/", get(root));
 
     let app = app.route("/redis", get(redis));
+
+    let app = app.route("/token", get(decode_token));
 
     let app = app.route("/protobuf", get(protobuf));
 
@@ -115,4 +120,27 @@ async fn not_found() -> impl IntoResponse {
     );
 
     response
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct Claims {
+    #[serde(rename = "UserId")]
+    user_id: String,
+    exp: usize,
+    nbf: usize,
+    iat: usize,
+}
+
+async fn decode_token() -> String {
+    let token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOiIweDMwMDAwMCIsImV4cCI6MTcyMjQyMDA3MywibmJmIjoxNzIxODE1MjczLCJpYXQiOjE3MjE4MTUyNzN9.hjp_n5Lix6_DdD4RwkSATxe1WpY0BsPnKa5mHhu3nk4";
+    let data = decode::<Claims>(
+        &token,
+        &DecodingKey::from_secret("secret".as_ref()),
+        &Validation::new(Algorithm::HS256),
+    )
+    .unwrap();
+
+    println!("{:?}", data);
+
+    data.claims.user_id
 }
