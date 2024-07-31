@@ -1,3 +1,4 @@
+use api::person::Person;
 use axum::{
     http::{
         header::{HeaderName, HeaderValue},
@@ -21,6 +22,10 @@ use graphql::{create_schema, graphql_handler};
 use redis::{Commands, RedisResult};
 use serde_json::json;
 
+mod api {
+    pub mod person;
+}
+
 mod repository {
     pub mod redis;
 }
@@ -41,6 +46,8 @@ async fn main() {
     let app = Router::new().route("/", get(root));
 
     let app = app.route("/redis", get(redis));
+
+    let app = app.route("/protobuf", get(protobuf));
 
     let app = app
         .route("/graphql", post(graphql_handler))
@@ -73,6 +80,15 @@ async fn redis() -> impl IntoResponse {
             format!("not found value from redis by key {}", "my_key"),
         )
     }
+}
+
+async fn protobuf() -> impl IntoResponse {
+    let mut human = Person::new();
+    human.id = 10086;
+    human.name = "中国移动".to_string();
+    human.email = "10086@139.com".to_string();
+
+    (StatusCode::OK, human.to_string()).into_response()
 }
 
 async fn root() -> &'static str {

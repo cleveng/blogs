@@ -13,3 +13,10 @@ curl -i -X POST \
      http://127.0.0.1:8090/graphql
 
 ```
+
+### install protobuf
+cargo install protobuf-codegen
+
+protoc-gen-rust --version
+
+protoc --rust_out=./ person.proto
