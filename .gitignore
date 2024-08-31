@@ -1,3 +1,4 @@
+
 # Created by https://www.toptal.com/developers/gitignore/api/macos,jetbrains+all
 # Edit at https://www.toptal.com/developers/gitignore?templates=macos,jetbrains+all
 
@@ -43,6 +44,7 @@
 # .idea/modules
 # *.iml
 # *.ipr
+.idea
 
 # CMake
 cmake-build-*/
@@ -83,7 +85,7 @@ fabric.properties
 ### JetBrains+all Patch ###
 # Ignore everything but code style settings and run configurations
 # that are supposed to be shared within teams.
-.idea
+
 .idea/*
 
 !.idea/codeStyles
@@ -120,5 +122,42 @@ Temporary Items
 
 # End of https://www.toptal.com/developers/gitignore/api/macos,jetbrains+all
 
-/target
-config.toml
+/node_modules
+/public/build
+/public/hot
+/public/storage
+/storage/*.key
+/vendor
+
+.env
+.env.backup
+.env.production
+
+.phpunit.result.cache
+Homestead.json
+Homestead.yaml
+auth.json
+npm-debug.log
+yarn-error.log
+_custom.scss
+composer.lock
+.yarn
+deploy.sh
+
+# bun
+bun.lockb
+
+# qrcode
+public/*.svg
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+.next
+
+# rust
+target
