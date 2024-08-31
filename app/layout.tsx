@@ -2,7 +2,17 @@ import type {Metadata} from 'next'
 import {Inter} from 'next/font/google'
 import './assets/styles/app.scss'
 
+// radix-ui
+// <https://www.radix-ui.com/themes/docs/overview/getting-started>
+import '@radix-ui/themes/styles.css'
+import '@radix-ui/themes/layout.css'
+import '@radix-ui/colors/black-alpha.css'
+import '@radix-ui/colors/green.css'
+import '@radix-ui/colors/mauve.css'
+import '@radix-ui/colors/violet.css'
+
 import React from 'react'
+import {Theme} from '@radix-ui/themes'
 
 const inter = Inter({subsets: ['latin']})
 
@@ -19,7 +29,9 @@ export default function RootLayout({children}: Readonly<Props>) {
     return (
         <html lang="en">
         <body className={inter.className}>
+        <Theme>
             {children}
+        </Theme>
         </body>
         </html>
     )
