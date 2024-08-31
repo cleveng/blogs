@@ -1,12 +1,15 @@
 #### Frontend
-+ nextjs
-+ tailwindcss
-+ radix-ui
+
+- nextjs
+- tailwindcss
+- radix-ui
 
 #### Backend
-+ rust
+
+- rust
 
 #### Deploy
+
 Deploy on Vercel by github workflow ci
 
 #### [Demo](https://blog.cakioe.com)
