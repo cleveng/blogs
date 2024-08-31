@@ -4,7 +4,7 @@ import './assets/styles/app.scss'
 import './assets/styles/radix-ui.css'
 
 import React from 'react'
-import { Theme } from '@radix-ui/themes'
+import DefaultLayout from '@layouts/default'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -19,9 +19,9 @@ type Props = {
 
 export default function RootLayout({ children }: Readonly<Props>) {
   return (
-    <html lang='en'>
+    <html lang='en' suppressHydrationWarning>
       <body className={inter.className}>
-        <Theme>{children}</Theme>
+        <DefaultLayout>{children}</DefaultLayout>
       </body>
     </html>
   )

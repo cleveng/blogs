@@ -12,15 +12,17 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
+    "baseUrl": ".",
     "plugins": [
       {
         "name": "next"
       }
     ],
     "paths": {
-      "@/*": ["./*"]
+      "@/*": ["./*"],
+      "@layouts/*": ["layouts/*"]
     }
   },
   "include": ["next-env.d.ts", "app/*.ts", "app/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules", "target", "src"]
+  "exclude": ["node_modules", "target", "src", "tailwind.config.ts"]
 }
