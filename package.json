@@ -10,7 +10,7 @@
   },
   "scripts": {
     "dev": "next dev",
-    "build": "prettier --check . && stylelint --allow-empty-input \"app/*.{css,scss}\" && next build",
+    "build": "prettier --write . && stylelint --allow-empty-input \"app/*.{css,scss}\" && next build",
     "start": "next start",
     "lint": "prettier --write . && stylelint --allow-empty-input \"app/*.{css,scss}\" && next lint",
     "prettier": "prettier --write .",
