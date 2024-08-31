@@ -1,4 +1,6 @@
 import React from 'react'
+import * as Dialog from '@radix-ui/react-dialog'
+import { Cross2Icon } from '@radix-ui/react-icons'
 
 export default function Home() {
   return (
@@ -23,15 +25,47 @@ export default function Home() {
                   →
                 </span>
               </a>
-              <a
-                href='#'
-                className='inline-block rounded-lg px-4 py-1.5 text-base font-semibold leading-7 text-gray-900 ring-1 ring-gray-900/10 hover:ring-gray-900/20 dark:text-gray-100'
-              >
-                Read the guide
-                <span aria-hidden='true' className='text-gray-400'>
-                  →
-                </span>
-              </a>
+              <Dialog.Root>
+                <Dialog.Trigger asChild>
+                  <button className='inline-block rounded-lg px-4 py-1.5 text-base font-semibold leading-7 text-gray-900 ring-1 ring-gray-900/10 hover:ring-gray-900/20 dark:text-gray-100'>
+                    Read the guide
+                    <span aria-hidden='true' className='text-gray-400'>
+                      →
+                    </span>
+                  </button>
+                </Dialog.Trigger>
+                <Dialog.Portal>
+                  <Dialog.Overlay className='DialogOverlay' />
+                  <Dialog.Content className='DialogContent'>
+                    <Dialog.Title className='DialogTitle'>Edit profile</Dialog.Title>
+                    <Dialog.Description className='DialogDescription'>
+                      Make changes to your profile here. Click save when you are done.
+                    </Dialog.Description>
+                    <fieldset className='Fieldset'>
+                      <label className='Label' htmlFor='name'>
+                        Name
+                      </label>
+                      <input className='Input' id='name' defaultValue='Pedro Duarte' />
+                    </fieldset>
+                    <fieldset className='Fieldset'>
+                      <label className='Label' htmlFor='username'>
+                        Username
+                      </label>
+                      <input className='Input' id='username' defaultValue='@peduarte' />
+                    </fieldset>
+                    <div style={{ display: 'flex', marginTop: 25, justifyContent: 'flex-end' }}>
+                      <Dialog.Close asChild>
+                        <button className='Button green'>Save changes</button>
+                      </Dialog.Close>
+                    </div>
+                    <Dialog.Close asChild>
+                      <button className='IconButton' aria-label='Close'>
+                        <Cross2Icon />
+                      </button>
+                    </Dialog.Close>
+                  </Dialog.Content>
+                </Dialog.Portal>
+              </Dialog.Root>
             </div>
           </div>
         </div>
