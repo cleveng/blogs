@@ -1,7 +1,8 @@
 {
   "name": "blogs",
   "version": "1.0.0",
-  "private": true,
+  "private": false,
+  "license": "MIT",
   "appid": "wx069ed4223ac1660f",
   "author": {
     "name": "cleveng",
