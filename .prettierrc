@@ -1,9 +1,11 @@
 {
+  "$schema": "https://json.schemastore.org/prettierrc",
   "singleQuote": true,
   "jsxSingleQuote": true,
   "semi": false,
   "trailingComma": "none",
   "arrowParens": "avoid",
   "printWidth": 120,
-  "tabWidth": 2
+  "tabWidth": 2,
+  "plugins": ["prettier-plugin-tailwindcss"]
 }

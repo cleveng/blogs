@@ -1,6 +1,4 @@
 /dist/*
-.local
-.output.js
 /node_modules/**
 
 **/*.svg
@@ -9,4 +7,3 @@
 /public/*
 src
 src-tauri
-target
