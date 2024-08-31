@@ -8,7 +8,7 @@ module.exports = {
     {
       files: ['*.ts', '*.tsx'],
       parserOptions: {
-        project: ['./tsconfig.json'],
+        project: [],
         tsconfigRootDir: __dirname
       },
       extends: [
@@ -19,5 +19,7 @@ module.exports = {
       ]
     }
   ],
-  rules: {}
+  rules: {
+    '@typescript-eslint/array-type': 'error',
+  }
 }
