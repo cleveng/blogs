@@ -23,6 +23,6 @@
       "@layouts/*": ["layouts/*"]
     }
   },
-  "include": ["next-env.d.ts", "app/*.ts", "app/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules", "target", "src", "tailwind.config.ts"]
+  "include": ["next-env.d.ts", "app/*.ts", "app/*.tsx", ".next/types/**/*.ts", "tailwind.config.ts"],
+  "exclude": ["node_modules", "target", "src"]
 }
