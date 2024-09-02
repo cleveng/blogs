@@ -20,9 +20,10 @@
     ],
     "paths": {
       "@/*": ["./*"],
-      "@layouts/*": ["layouts/*"]
+      "@layouts/*": ["layouts/*"],
+      "@components/*": ["app/components/*"]
     }
   },
-  "include": ["next-env.d.ts", "app/*.ts", "app/*.tsx", ".next/types/**/*.ts", "tailwind.config.ts"],
+  "include": ["next-env.d.ts", "app/**/*.ts", "app/**/*.tsx", ".next/types/**/*.ts", "tailwind.config.ts"],
   "exclude": ["node_modules", "target", "src"]
 }

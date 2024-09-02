@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 'use client'
 
 import React from 'react'
@@ -6,6 +8,9 @@ import { Cross2Icon } from '@radix-ui/react-icons'
 import { useTheme } from 'next-themes'
 import Image from 'next/image'
 import { StarFilledIcon } from '@radix-ui/react-icons'
+import { useEffect, useState } from 'react'
+import ThemeSwitch from '@/app/components/theme-switch'
+import { toBase64String } from '@cakioe/kit.js'
 
 export default function Home() {
   const { theme, setTheme } = useTheme()
@@ -14,6 +19,64 @@ export default function Home() {
   const toggleDarkMode = () => {
     setTheme(isDarkMode ? 'light' : 'dark')
   }
+
+  const [socket, setSocket] = useState<WebSocket>()
+  const [message, setMessage] = useState('')
+  const [messages, setMessages] = useState<MessageEvent[]>([])
+  const [isConnected, setIsConnected] = useState(false)
+  let pingInterval: string | number | NodeJS.Timeout | undefined // 用于存储心跳检测定时器
+  useEffect(() => {
+    // Initialize WebSocket connection when the component mounts
+    const client = new WebSocket('ws://localhost:8100/ws?appid=key')
+
+    // Set the WebSocket instance to state
+    setSocket(client)
+
+    client.onopen = () => {
+      console.log('Connected to the WebSocket server.')
+      setIsConnected(true) // 设置连接状态为已连接
+      // 开始心跳检测
+      pingInterval = setInterval(() => {
+        if (client.readyState === WebSocket.OPEN) {
+          const payload = toBase64String({ content: 'ping' }, 'key')
+          client.send(payload)
+        }
+      }, 5000) // 每 5 秒发送一个 ping
+    }
+
+    // Handle incoming messages
+    client.onmessage = event => {
+      setMessages(prevMessages => [...prevMessages, event.data])
+    }
+
+    // Handle WebSocket errors
+    client.onerror = error => {
+      console.error('WebSocket error:', error)
+    }
+
+    client.onclose = event => {
+      clearInterval(pingInterval)
+      console.log('Disconnected from the WebSocket server.', event)
+      setIsConnected(false) // 设置连接状态为已断开
+    }
+
+    // Clean up WebSocket connection when the component unmounts
+    return () => {
+      client.close()
+    }
+  }, [])
+
+  // Send a message to the WebSocket server
+  const sendMessage = () => {
+    if (socket && message) {
+      const payload = toBase64String({ content: message, method: 'reboot' }, 'key')
+      console.log(payload)
+      socket.send(payload)
+
+      setMessage('') // Clear the input field after sending a message
+    }
+  }
+
   return (
     <div className='relative min-h-screen bg-gray-50 px-6 pb-[500px] text-gray-700 dark:bg-gray-800 dark:text-white lg:px-8'>
       <div className='mx-auto max-w-3xl pb-32 pt-20 sm:pb-40 sm:pt-48'>
@@ -580,34 +643,6 @@ export default function Home() {
           <p className='second-text'>Lorem Ipsum</p>
         </div>
       </div>
-      <input id='switch' type='checkbox' />
-      <div className='app'>
-        <div className='body max-w-[288px]'>
-          <div className='phone'>
-            <div className='menu'>
-              <div className='time'>4:20</div>
-              <div className='icons'>
-                <div className='network'></div>
-                <div className='battery'></div>
-              </div>
-            </div>
-
-            <div className='content'>
-              <div className='circle'>
-                <div className='crescent'></div>
-              </div>
-
-              <label htmlFor='switch'>
-                <div className='toggle'></div>
-                <div className='names'>
-                  <p className='light'>Light</p>
-                  <p className='dark'>Dark</p>
-                </div>
-              </label>
-            </div>
-          </div>
-        </div>
-      </div>
       <div className='mt-10 flex max-w-[540px] flex-col rounded-3xl bg-white shadow-lg'>
         <div className='px-6 py-8 sm:p-10 sm:pb-6'>
           <div className='grid w-full grid-cols-1 items-center justify-center text-left'>
@@ -749,6 +784,122 @@ export default function Home() {
           <div className='albumcover'></div>
           <div className='play'></div>
         </div>
+      </div>
+      <div className='container mx-auto'>
+        <h4>websocket</h4>
+        <div>
+          <input type='text' value={message} onChange={e => setMessage(e.target.value)} placeholder='Enter message' />
+          <button onClick={sendMessage}>Send</button>
+        </div>
+
+        <div>
+          <h2>Messages from Server: {isConnected ? 'Connected' : 'Disconnected'}</h2>
+          <ul>
+            {messages.map((msg: MessageEvent, index: number) => (
+              <li key={index}>{msg as unknown as never}</li>
+            ))}
+          </ul>
+        </div>
+      </div>
+      <div>
+        <div className='fixed bottom-[calc(4rem+1.5rem)] right-0 mr-4 h-[634px] w-[440px] rounded-lg border border-[#e5e7eb] bg-white p-6 md:hidden'>
+          <div className='flex flex-col space-y-1.5 pb-6'>
+            <h2 className='text-lg font-semibold tracking-tight'>Chatbot</h2>
+            <p className='text-sm leading-3 text-[#6b7280]'>Powered by Mendable and Vercel</p>
+          </div>
+          <div className='table h-[474px] min-w-full pr-4'>
+            <div className='my-4 flex flex-1 gap-3 text-sm text-gray-600'>
+              <span className='relative flex h-8 w-8 shrink-0 overflow-hidden rounded-full'>
+                <div className='rounded-full border bg-gray-100 p-1'>
+                  <svg
+                    stroke='none'
+                    fill='black'
+                    stroke-width='1.5'
+                    viewBox='0 0 24 24'
+                    aria-hidden='true'
+                    height='20'
+                    width='20'
+                    xmlns='http://www.w3.org/2000/svg'
+                  >
+                    <path
+                      stroke-linecap='round'
+                      stroke-linejoin='round'
+                      d='M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z'
+                    ></path>
+                  </svg>
+                </div>
+              </span>
+              <p className='leading-relaxed'>
+                <span className='block font-bold text-gray-700'>AI </span>Hi, how can I help you today?
+              </p>
+            </div>
+
+            <div className='my-4 flex flex-1 gap-3 text-sm text-gray-600'>
+              <span className='relative flex h-8 w-8 shrink-0 overflow-hidden rounded-full'>
+                <div className='rounded-full border bg-gray-100 p-1'>
+                  <svg
+                    stroke='none'
+                    fill='black'
+                    stroke-width='0'
+                    viewBox='0 0 16 16'
+                    height='20'
+                    width='20'
+                    xmlns='http://www.w3.org/2000/svg'
+                  >
+                    <path d='M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4Zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10Z'></path>
+                  </svg>
+                </div>
+              </span>
+              <p className='leading-relaxed'>
+                <span className='block font-bold text-gray-700'>You </span>fewafef
+              </p>
+            </div>
+
+            <div className='my-4 flex flex-1 gap-3 text-sm text-gray-600'>
+              <span className='relative flex h-8 w-8 shrink-0 overflow-hidden rounded-full'>
+                <div className='rounded-full border bg-gray-100 p-1'>
+                  <svg
+                    stroke='none'
+                    fill='black'
+                    stroke-width='1.5'
+                    viewBox='0 0 24 24'
+                    aria-hidden='true'
+                    height='20'
+                    width='20'
+                    xmlns='http://www.w3.org/2000/svg'
+                  >
+                    <path
+                      stroke-linecap='round'
+                      stroke-linejoin='round'
+                      d='M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z'
+                    ></path>
+                  </svg>
+                </div>
+              </span>
+              <p className='leading-relaxed'>
+                <span className='block font-bold text-gray-700'>AI </span>Sorry, I could not find any information in the
+                documentation about that. Expect answer to be less accurateI could not find the answer to this in the
+                verified sources.
+              </p>
+            </div>
+          </div>
+
+          <div className='flex items-center pt-0'>
+            <form className='flex w-full items-center justify-center space-x-2'>
+              <input
+                className='flex h-10 w-full rounded-md border border-[#e5e7eb] px-3 py-2 text-sm text-[#030712] placeholder-[#6b7280] focus:outline-none focus:ring-2 focus:ring-[#9ca3af] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50'
+                placeholder='Type your message'
+                value=''
+              />
+              <button className='inline-flex h-10 items-center justify-center rounded-md bg-black px-4 py-2 text-sm font-medium text-[#f9fafb] hover:bg-[#111827E6] disabled:pointer-events-none disabled:opacity-50'>
+                Send
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div className='container mx-auto mt-10'>
+        <ThemeSwitch />
       </div>
     </div>
   )

@@ -5,6 +5,7 @@ import './assets/styles/radix-ui.css'
 
 import React from 'react'
 import DefaultLayout from '@layouts/default'
+import ToTop from '@components/totop'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -21,7 +22,10 @@ export default function RootLayout({ children }: Readonly<Props>) {
   return (
     <html lang='en' suppressHydrationWarning>
       <body className={inter.className}>
-        <DefaultLayout>{children}</DefaultLayout>
+        <DefaultLayout>
+          {children}
+          <ToTop />
+        </DefaultLayout>
       </body>
     </html>
   )
