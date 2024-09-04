@@ -1,8 +1,16 @@
 import React from 'react'
 import * as Popover from '@radix-ui/react-popover'
+import { useTheme } from 'next-themes'
 
 import { ContainerIcon } from '@radix-ui/react-icons'
 const ThemeSwitch = () => {
+  const { theme, setTheme } = useTheme()
+  const isDarkMode = theme === 'dark' ?? false
+
+  const toggleDarkMode = () => {
+    setTheme(isDarkMode ? 'light' : 'dark')
+  }
+
   return (
     <>
       <Popover.Root>
@@ -25,15 +33,25 @@ const ThemeSwitch = () => {
                     style={{ transform: 'translateY(5%)' }}
                     className='content mx-auto flex w-[70%] flex-col text-center'
                   >
-                    <div className='circle'>
-                      <div className='crescent'></div>
+                    <div
+                      className='circle relative mx-auto h-32 w-32 rounded-full'
+                      style={{ background: 'linear-gradient(40deg, #ff0080, #ff8c00 70%)' }}
+                    >
+                      <div className='crescent absolute right-0 h-24 w-24 origin-top-right scale-0 rounded-full bg-white'></div>
                     </div>
 
                     <label htmlFor='switch'>
-                      <div className='toggle h-11'></div>
+                      <div className='toggle h-11 dark:translate-x-full dark:bg-white/10'></div>
                       <div className='mx-auto flex h-11 w-4/6 select-none items-center justify-between text-center text-base font-bold'>
-                        <p className='light'>Light</p>
-                        <p className='dark opacity-50'>Dark</p>
+                        <p className='light' onClick={() => setTheme('light')}>
+                          Light
+                        </p>
+                        <p
+                          className='dark opacity-50 dark:text-white dark:backdrop-opacity-10'
+                          onClick={() => setTheme('dark')}
+                        >
+                          Dark
+                        </p>
                       </div>
                     </label>
                   </div>

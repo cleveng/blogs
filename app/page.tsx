@@ -27,7 +27,7 @@ export default function Home() {
   let pingInterval: string | number | NodeJS.Timeout | undefined // 用于存储心跳检测定时器
   useEffect(() => {
     // Initialize WebSocket connection when the component mounts
-    const client = new WebSocket('ws://localhost:8100/ws?appid=key')
+    const client = new WebSocket('wss://echo.websocket.org') //wss://www.awish.vip/ws?appid=ds069ed4223ac1660f
 
     // Set the WebSocket instance to state
     setSocket(client)
