@@ -216,8 +216,6 @@ input {
   transform: scale(0.9, 0.9);
 }
 
-/** switch **/
-
 /* GENERAL */
 
 .credit {
@@ -229,18 +227,6 @@ input {
 
 .credit a {
   color: inherit;
-}
-
-/* Main Circle */
-.main-circle {
-  width: 40rem;
-  height: 40rem;
-  border-radius: 100%;
-  background: linear-gradient(40deg, #ff0080, #ff8c00 70%);
-  position: absolute;
-  z-index: 1;
-  left: 50%;
-  transform: translate(-50%, -70%);
 }
 
 /* Top */
@@ -256,41 +242,14 @@ input {
   align-items: center;
 }
 
-/* Middle */
-
-.crescent {
-  transition: -webkit-transform 0.6s cubic-bezier(0.645, 0.045, 0.355, 1);
-  transition: transform 0.6s cubic-bezier(0.645, 0.045, 0.355, 1);
-  transition:
-    transform 0.6s cubic-bezier(0.645, 0.045, 0.355, 1),
-    -webkit-transform 0.6s cubic-bezier(0.645, 0.045, 0.355, 1);
-}
-
-label,
-.toggle {
-  height: 2.8rem;
-  border-radius: 100px;
-}
-
 label {
+  height: 2.8rem;
   width: 100%;
   background-color: rgb(0 0 0 / 10%);
   border-radius: 100px;
   position: relative;
   margin: 1.8rem 0;
   cursor: pointer;
-}
-
-.toggle {
-  position: absolute;
-  width: 50%;
-  background-color: #fff;
-  box-shadow: 0 2px 15px rgb(0 0 0 / 15%);
-  transition: -webkit-transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  transition:
-    transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-    -webkit-transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .names {
@@ -300,44 +259,6 @@ label {
 .mark {
   border-radius: 100px;
   background-color: black;
-}
-
-/* -------- Switch Styles ------------ */
-[type='checkbox'] {
-  display: none;
-}
-
-[type='checkbox']:checked+.app .dark {
-  opacity: 1;
-  color: white;
-}
-
-[type='checkbox']:checked+.app .light {
-  opacity: 1;
-  color: white;
-}
-
-/* App */
-[type='checkbox']:checked+.app .body {
-  background-color: #26242e;
-}
-
-/* Circle */
-[type='checkbox']:checked+.app .crescent {
-  transform: scale(1);
-  background: #26242e;
-}
-
-[type='checkbox']:checked+.app .circle {
-  background: linear-gradient(40deg, #8983f7, #a3dafb 70%);
-}
-
-[type='checkbox']:checked+.app .main-circle {
-  background: linear-gradient(40deg, #8983f7, #a3dafb 70%);
-}
-
-[type='checkbox']:checked+.app .body {
-  border-radius: 40px;
 }
 
 /** form **/

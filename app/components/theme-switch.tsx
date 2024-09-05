@@ -11,6 +11,9 @@ const ThemeSwitch = () => {
     setTheme(isDarkMode ? 'light' : 'dark')
   }
 
+  const now = new Date()
+  const today = `${now.getHours()}:${now.getMinutes()}`
+
   return (
     <>
       <Popover.Root>
@@ -21,39 +24,30 @@ const ThemeSwitch = () => {
         </Popover.Trigger>
         <Popover.Portal>
           <Popover.Content sideOffset={5}>
-            <input id='switch' type='checkbox' />
-            <div className='app'>
-              <div className='body z-10 w-[288px]'>
-                <div className='relative flex flex-col rounded-3xl bg-inherit shadow-lg'>
-                  <div className='flex items-center justify-between px-7 py-3 text-sm text-gray-600 dark:text-white'>
-                    <div>4:20</div>
-                    <ContainerIcon />
+            <div className='z-10 w-[288px] rounded-2xl dark:bg-[#26242e]'>
+              <div className='relative flex flex-col rounded-2xl bg-inherit shadow-lg'>
+                <div className='flex items-center justify-between px-7 py-3 text-sm text-gray-600 dark:text-white'>
+                  <div onClick={() => toggleDarkMode()}>{today}</div>
+                  <ContainerIcon />
+                </div>
+                <div style={{ transform: 'translateY(5%)' }} className='mx-auto flex w-[70%] flex-col text-center'>
+                  <div className='relative mx-auto h-32 w-32 rounded-full bg-gradient-to-b from-yellow-500 to-red-500 dark:from-indigo-400 dark:to-sky-200'>
+                    <div className='absolute right-0 h-24 w-24 origin-top-right scale-0 rounded-full bg-white ease-in-out dark:scale-100 dark:bg-[#26242e]'></div>
                   </div>
-                  <div
-                    style={{ transform: 'translateY(5%)' }}
-                    className='content mx-auto flex w-[70%] flex-col text-center'
-                  >
-                    <div
-                      className='circle relative mx-auto h-32 w-32 rounded-full'
-                      style={{ background: 'linear-gradient(40deg, #ff0080, #ff8c00 70%)' }}
-                    >
-                      <div className='crescent absolute right-0 h-24 w-24 origin-top-right scale-0 rounded-full bg-white'></div>
-                    </div>
 
-                    <label htmlFor='switch'>
-                      <div className='toggle h-11 dark:translate-x-full dark:bg-white/10'></div>
-                      <div className='mx-auto flex h-11 w-4/6 select-none items-center justify-between text-center text-base font-bold'>
-                        <p className='light' onClick={() => setTheme('light')}>
-                          Light
-                        </p>
-                        <p
-                          className='dark opacity-50 dark:text-white dark:backdrop-opacity-10'
-                          onClick={() => setTheme('dark')}
-                        >
-                          Dark
-                        </p>
-                      </div>
-                    </label>
+                  <div className='py-8'>
+                    <div className='absolute z-10 h-11 w-1/2 cursor-pointer rounded-3xl border-2 border-gray-50 bg-gray-300/10 shadow-lg transition ease-in-out dark:translate-x-full dark:bg-white/10'></div>
+                    <div className='mx-auto flex h-11 w-4/6 select-none items-center justify-between text-center text-base font-bold'>
+                      <p className='cursor-pointer opacity-100 dark:opacity-50' onClick={() => setTheme('light')}>
+                        Light
+                      </p>
+                      <p
+                        className='cursor-pointer opacity-50 shadow-sm dark:text-white dark:opacity-100'
+                        onClick={() => setTheme('dark')}
+                      >
+                        Dark
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
