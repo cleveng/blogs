@@ -1,5 +1,8 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
+import { NextIntlClientProvider } from 'next-intl'
+import { getLocale, getMessages } from 'next-intl/server'
+
 import './assets/styles/app.scss'
 import './assets/styles/radix-ui.css'
 
@@ -18,14 +21,22 @@ type Props = {
   children: React.ReactNode
 }
 
-export default function RootLayout({ children }: Readonly<Props>) {
+export default async function RootLayout({ children }: Readonly<Props>) {
+  const locale = await getLocale()
+
+  // Providing all messages to the client
+  // side is the easiest way to get started
+  const messages = await getMessages()
+
   return (
-    <html lang='en' suppressHydrationWarning>
+    <html lang={locale} suppressHydrationWarning>
       <body className={inter.className}>
-        <DefaultLayout>
-          {children}
-          <ToTop />
-        </DefaultLayout>
+        <NextIntlClientProvider messages={messages}>
+          <DefaultLayout>
+            {children}
+            <ToTop />
+          </DefaultLayout>
+        </NextIntlClientProvider>
       </body>
     </html>
   )

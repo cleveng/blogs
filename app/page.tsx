@@ -3,6 +3,7 @@
 'use client'
 
 import React from 'react'
+import { useTranslations } from 'next-intl'
 import * as Dialog from '@radix-ui/react-dialog'
 import { Cross2Icon } from '@radix-ui/react-icons'
 import { useTheme } from 'next-themes'
@@ -10,9 +11,10 @@ import Image from 'next/image'
 import { StarFilledIcon } from '@radix-ui/react-icons'
 import { useEffect, useState } from 'react'
 import ThemeSwitch from '@/app/components/theme-switch'
-import { toBase64String } from '@cakioe/kit.js'
+import { Signatory } from '@cakioe/kit.js'
 
 export default function Home() {
+  const singer = new Signatory('ds069ed4223ac1660f')
   const { theme, setTheme } = useTheme()
   const isDarkMode = theme === 'dark' ?? false
 
@@ -38,7 +40,7 @@ export default function Home() {
       // 开始心跳检测
       pingInterval = setInterval(() => {
         if (client.readyState === WebSocket.OPEN) {
-          const payload = toBase64String({ content: 'ping' }, 'key')
+          const payload = singer.toBase64String({ content: 'ping' })
           client.send(payload)
         }
       }, 5000) // 每 5 秒发送一个 ping
@@ -69,7 +71,7 @@ export default function Home() {
   // Send a message to the WebSocket server
   const sendMessage = () => {
     if (socket && message) {
-      const payload = toBase64String({ content: message, method: 'reboot' }, 'key')
+      const payload = singer.toBase64String({ content: message, method: 'reboot' })
       console.log(payload)
       socket.send(payload)
 
@@ -77,13 +79,15 @@ export default function Home() {
     }
   }
 
+  const t = useTranslations('HomePage')
+
   return (
     <>
       <div className='relative min-h-screen bg-gray-50 px-6 pb-[500px] text-gray-700 dark:bg-gray-800 dark:text-white lg:px-8'>
         <div className='mx-auto max-w-3xl pb-32 pt-20 sm:pb-40 sm:pt-48'>
           <div>
             <div>
-              <h1 className='text-4xl font-bold tracking-tight sm:text-center sm:text-6xl'>Title of your website</h1>
+              <h1 className='text-4xl font-bold tracking-tight sm:text-center sm:text-6xl'>{t('title')}</h1>
               <p className='mt-6 text-lg leading-8 sm:text-center'>
                 Long description of your website, Long description of your website, Long description of your website,
                 Long description of your website, Long description of your website,

@@ -211,7 +211,7 @@ input {
   transform: scale(1.1, 1.1);
 }
 
-.cards:hover>.card:not(:hover) {
+.cards:hover > .card:not(:hover) {
   filter: blur(10px);
   transform: scale(0.9, 0.9);
 }
@@ -283,7 +283,7 @@ label {
   align-self: flex-end;
 }
 
-.flex-column>label {
+.flex-column > label {
   color: #151717;
   font-weight: 600;
 }
@@ -322,7 +322,7 @@ label {
   justify-content: space-between;
 }
 
-.flex-row>div>label {
+.flex-row > div > label {
   font-size: 14px;
   color: black;
   font-weight: 400;
