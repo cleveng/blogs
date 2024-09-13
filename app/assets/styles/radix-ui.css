@@ -14,7 +14,7 @@
 @import '@radix-ui/colors/violet.css';
 @import '@radix-ui/colors/slate.css';
 
-/* 
+/*
 .DialogOverlay {
   background-color: var(--black-a9);
   position: fixed;
@@ -646,109 +646,89 @@ label {
 */
 
 .FormRoot {
-  @apply w-full mt-10;
+    @apply w-full mt-10;
 }
 
 .FormField {
-  display: grid;
-  margin-bottom: 10px;
+    display: grid;
+    margin-bottom: 10px;
 }
 
 .FormLabel {
-  @apply text-base
+    @apply text-base
 }
 
 .FormMessage {
-  font-size: 13px;
-  opacity: 0.8;
+    font-size: 13px;
+    opacity: 0.8;
 }
 
 .Input,
 .Textarea {
-  width: 100%;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 4px;
-  font-size: 15px;
-  background-color: var(--black-a2);
-  box-shadow: 0 0 0 1px var(--black-a6);
+    width: 100%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    font-size: 15px;
+    background-color: var(--black-a2);
+    box-shadow: 0 0 0 1px var(--black-a6);
 }
 
 .Input:hover,
 .Textarea:hover {
-  box-shadow: 0 0 0 1px black;
+    box-shadow: 0 0 0 1px black;
 }
 
 .Input:focus,
 .Textarea:focus {
-  box-shadow: 0 0 0 2px black;
+    box-shadow: 0 0 0 2px black;
 }
 
 .Input::selection,
 .Textarea::selection {
-  background-color: var(--black-a6);
+    background-color: var(--black-a6);
 }
 
 .Input {
-  padding: 0 10px;
-  height: 35px;
-  line-height: 1;
+    padding: 0 10px;
+    height: 35px;
+    line-height: 1;
 }
 
 .Textarea {
-  resize: none;
-  padding: 10px;
+    resize: none;
+    padding: 10px;
 }
 
 .Button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 4px;
-  padding: 0 15px;
-  font-size: 15px;
-  line-height: 1;
-  font-weight: 500;
-  height: 35px;
-  width: 100%;
-  background-color: white;
-  color: var(--violet-11);
-  box-shadow: 0 2px 10px var(--black-a4);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    padding: 0 15px;
+    font-size: 15px;
+    line-height: 1;
+    font-weight: 500;
+    height: 35px;
+    width: 100%;
+    background-color: white;
+    color: var(--violet-11);
+    box-shadow: 0 2px 10px var(--black-a4);
 }
 
 .Button:hover {
-  background-color: var(--mauve-3);
+    background-color: var(--mauve-3);
 }
 
 .Button:focus {
-  box-shadow: 0 0 0 2px black;
-}
-
-.CheckboxRoot {
-  width: 25px;
-  height: 25px;
-  border-radius: 4px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 2px 10px var(--black-a7);
+    box-shadow: 0 0 0 2px black;
 }
 
 .CheckboxRoot:hover {
-  background-color: var(--violet-3);
+    background-color: var(--violet-3);
 }
 
 .CheckboxRoot:focus {
-  box-shadow: 0 0 0 2px black;
-}
-
-.CheckboxIndicator {
-  color: var(--violet-11);
-}
-
-.Label {
-  padding-left: 15px;
-  font-size: 15px;
-  line-height: 1;
+    box-shadow: 0 0 0 2px black;
 }

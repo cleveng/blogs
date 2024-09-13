@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 'use client'
 
-import { Button, Link, Text } from '@radix-ui/themes'
+import { Box, Button, Card, Container, Grid, Inset, Link, Strong, Text } from '@radix-ui/themes'
 import React, { useEffect, useState } from 'react'
 import { useTranslations } from 'next-intl'
 import * as Dialog from '@radix-ui/react-dialog'
@@ -11,7 +11,6 @@ import { useTheme } from 'next-themes'
 import Image from 'next/image'
 import ThemeSwitch from '@/app/components/theme-switch'
 import { Signatory } from '@cakioe/kit.js'
-
 import { appid, version } from './config'
 
 export default function Home() {
@@ -390,6 +389,33 @@ export default function Home() {
             </div>
           </div>
         </div>
+        <Container>
+          <Grid columns='4' gap='8'>
+            {Array.from({ length: 4 }, (_, i) => i + 1).map(number => (
+              <Box key={number}>
+                <Card className='w-full'>
+                  <Inset clip='padding-box' side='top' pb='current'>
+                    <img
+                      src='https://images.unsplash.com/photo-1617050318658-a9a3175e34cb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80'
+                      alt='Bold typography'
+                      style={{
+                        display: 'block',
+                        objectFit: 'cover',
+                        width: '100%',
+                        height: 140,
+                        backgroundColor: 'var(--gray-5)'
+                      }}
+                    />
+                  </Inset>
+                  <Text as='p' size='3'>
+                    <Strong>Typography</Strong> is the art and technique of arranging type to make written language
+                    legible, readable and appealing when displayed.
+                  </Text>
+                </Card>
+              </Box>
+            ))}
+          </Grid>
+        </Container>
         {/* Product start */}
         <section className='container mx-auto'>
           <div className='mb-20'>
