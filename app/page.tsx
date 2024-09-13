@@ -2,15 +2,13 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 'use client'
 
-import { Button, Text, Link } from '@radix-ui/themes'
-import React from 'react'
+import { Button, Link, Text } from '@radix-ui/themes'
+import React, { useEffect, useState } from 'react'
 import { useTranslations } from 'next-intl'
 import * as Dialog from '@radix-ui/react-dialog'
-import { Cross2Icon } from '@radix-ui/react-icons'
+import { Cross2Icon, StarFilledIcon } from '@radix-ui/react-icons'
 import { useTheme } from 'next-themes'
 import Image from 'next/image'
-import { StarFilledIcon } from '@radix-ui/react-icons'
-import { useEffect, useState } from 'react'
 import ThemeSwitch from '@/app/components/theme-switch'
 import { Signatory } from '@cakioe/kit.js'
 
@@ -50,7 +48,7 @@ export default function Home() {
       }, 5000) // 每 5 秒发送一个 ping
     }
 
-    // Handle incoming messages
+    // Handle incoming locales
     client.onmessage = event => {
       setMessages(prevMessages => [...prevMessages, event.data])
     }

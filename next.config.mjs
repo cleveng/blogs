@@ -1,6 +1,6 @@
 import createNextIntlPlugin from 'next-intl/plugin'
 
-const withNextIntl = createNextIntlPlugin()
+const withNextIntl = createNextIntlPlugin('./app/i18n/index.tsx')
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
