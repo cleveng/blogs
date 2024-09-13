@@ -21,5 +21,7 @@ module.exports = {
   ],
   rules: {
     '@typescript-eslint/array-type': 'error'
+    // '@typescript-eslint/no-unsafe-assignment': 'error',
+    // '@typescript-eslint/no-unsafe-call': 'error'
   }
 }

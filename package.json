@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": false,
   "license": "MIT",
-  "appid": "wx069ed4223ac1660f",
+  "appid": "ck069ed4223ac1660f",
   "author": {
     "name": "cleveng",
     "email": "cleveng@gmail.com"
@@ -22,7 +22,7 @@
     "app/*.{js,ts,css,scss}": "prettier --write --ignore-unknown"
   },
   "dependencies": {
-    "@cakioe/kit.js": "^1.3.3",
+    "@cakioe/kit.js": "1.5.2",
     "@commitlint/cli": "^19.4.0",
     "@commitlint/config-conventional": "^19.2.2",
     "@next/eslint-plugin-next": "^14.2.7",

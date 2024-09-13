@@ -14,13 +14,7 @@
 @import '@radix-ui/colors/violet.css';
 @import '@radix-ui/colors/slate.css';
 
-/* reset */
-button,
-fieldset,
-input {
-  all: unset;
-}
-
+/* 
 .DialogOverlay {
   background-color: var(--black-a9);
   position: fixed;
@@ -163,9 +157,9 @@ input {
     opacity: 1;
     transform: translate(-50%, -50%) scale(1);
   }
-}
+} */
 
-/* cards */
+/* 
 .cards {
   display: flex;
   flex-direction: column;
@@ -211,12 +205,11 @@ input {
   transform: scale(1.1, 1.1);
 }
 
-.cards:hover > .card:not(:hover) {
+.cards:hover>.card:not(:hover) {
   filter: blur(10px);
   transform: scale(0.9, 0.9);
-}
+} 
 
-/* GENERAL */
 
 .credit {
   position: fixed;
@@ -229,9 +222,8 @@ input {
   color: inherit;
 }
 
-/* Top */
+
 .menu {
-  /*   background-color: blue; */
   font-size: 80%;
   opacity: 0.4;
   padding: 0.8rem 1.8rem;
@@ -261,7 +253,6 @@ label {
   background-color: black;
 }
 
-/** form **/
 .form {
   display: flex;
   flex-direction: column;
@@ -283,7 +274,7 @@ label {
   align-self: flex-end;
 }
 
-.flex-column > label {
+.flex-column>label {
   color: #151717;
   font-weight: 600;
 }
@@ -322,7 +313,7 @@ label {
   justify-content: space-between;
 }
 
-.flex-row > div > label {
+.flex-row>div>label {
   font-size: 14px;
   color: black;
   font-weight: 400;
@@ -498,12 +489,6 @@ label {
   }
 }
 
-/* reset */
-button,
-fieldset,
-input {
-  all: unset;
-}
 
 .PopoverContent {
   border-radius: 4px;
@@ -657,4 +642,113 @@ input {
     opacity: 1;
     transform: translateX(0);
   }
+}
+*/
+
+.FormRoot {
+  @apply w-full mt-10;
+}
+
+.FormField {
+  display: grid;
+  margin-bottom: 10px;
+}
+
+.FormLabel {
+  @apply text-base
+}
+
+.FormMessage {
+  font-size: 13px;
+  opacity: 0.8;
+}
+
+.Input,
+.Textarea {
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  font-size: 15px;
+  background-color: var(--black-a2);
+  box-shadow: 0 0 0 1px var(--black-a6);
+}
+
+.Input:hover,
+.Textarea:hover {
+  box-shadow: 0 0 0 1px black;
+}
+
+.Input:focus,
+.Textarea:focus {
+  box-shadow: 0 0 0 2px black;
+}
+
+.Input::selection,
+.Textarea::selection {
+  background-color: var(--black-a6);
+}
+
+.Input {
+  padding: 0 10px;
+  height: 35px;
+  line-height: 1;
+}
+
+.Textarea {
+  resize: none;
+  padding: 10px;
+}
+
+.Button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  padding: 0 15px;
+  font-size: 15px;
+  line-height: 1;
+  font-weight: 500;
+  height: 35px;
+  width: 100%;
+  background-color: white;
+  color: var(--violet-11);
+  box-shadow: 0 2px 10px var(--black-a4);
+}
+
+.Button:hover {
+  background-color: var(--mauve-3);
+}
+
+.Button:focus {
+  box-shadow: 0 0 0 2px black;
+}
+
+.CheckboxRoot {
+  width: 25px;
+  height: 25px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 10px var(--black-a7);
+}
+
+.CheckboxRoot:hover {
+  background-color: var(--violet-3);
+}
+
+.CheckboxRoot:focus {
+  box-shadow: 0 0 0 2px black;
+}
+
+.CheckboxIndicator {
+  color: var(--violet-11);
+}
+
+.Label {
+  padding-left: 15px;
+  font-size: 15px;
+  line-height: 1;
 }
