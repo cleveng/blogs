@@ -2,7 +2,8 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 'use client'
 
-import { Box, Button, Card, Container, Grid, Inset, Link, Strong, Text } from '@radix-ui/themes'
+import { Box, Flex, Button, Card, Container, Skeleton, Grid, Inset, Strong, Text } from '@radix-ui/themes'
+import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 import { useTranslations } from 'next-intl'
 import * as Dialog from '@radix-ui/react-dialog'
@@ -10,6 +11,7 @@ import { Cross2Icon, StarFilledIcon } from '@radix-ui/react-icons'
 import { useTheme } from 'next-themes'
 import Image from 'next/image'
 import ThemeSwitch from '@/app/components/theme-switch'
+import * as Form from '@radix-ui/react-form'
 import { Signatory } from '@cakioe/kit.js'
 import { appid, version } from './config'
 
@@ -138,26 +140,11 @@ export default function Home() {
           <div className='flex-initial'>
             <div className='relative flex items-center justify-end'>
               <div className='mr-4 flex items-center'>
-                <a className='inline-block rounded-full px-3 py-2 hover:bg-gray-200' href='#'>
-                  <div className='relative flex cursor-pointer items-center whitespace-nowrap'>Become a host</div>
-                </a>
+                <Link className='inline-block rounded-full px-3 py-2 hover:bg-gray-200' href='/signin'>
+                  <Text className='relative flex cursor-pointer items-center whitespace-nowrap'>Become a host</Text>
+                </Link>
                 <div className='relative block'>
-                  <button type='button' className='relative inline-block rounded-full px-3 py-2 hover:bg-gray-200'>
-                    <div className='flex h-5 items-center'>
-                      <div className='_xpkakx'>
-                        <svg
-                          viewBox='0 0 16 16'
-                          xmlns='http://www.w3.org/2000/svg'
-                          aria-hidden='true'
-                          role='presentation'
-                          focusable='false'
-                          style={{ display: 'block', height: '16px', width: '16px', fill: 'currentcolor' }}
-                        >
-                          <path d='m8.002.25a7.77 7.77 0 0 1 7.748 7.776 7.75 7.75 0 0 1 -7.521 7.72l-.246.004a7.75 7.75 0 0 1 -7.73-7.513l-.003-.245a7.75 7.75 0 0 1 7.752-7.742zm1.949 8.5h-3.903c.155 2.897 1.176 5.343 1.886 5.493l.068.007c.68-.002 1.72-2.365 1.932-5.23zm4.255 0h-2.752c-.091 1.96-.53 3.783-1.188 5.076a6.257 6.257 0 0 0 3.905-4.829zm-9.661 0h-2.75a6.257 6.257 0 0 0 3.934 5.075c-.615-1.208-1.036-2.875-1.162-4.686l-.022-.39zm1.188-6.576-.115.046a6.257 6.257 0 0 0 -3.823 5.03h2.75c.085-1.83.471-3.54 1.059-4.81zm2.262-.424c-.702.002-1.784 2.512-1.947 5.5h3.904c-.156-2.903-1.178-5.343-1.892-5.494l-.065-.007zm2.28.432.023.05c.643 1.288 1.069 3.084 1.157 5.018h2.748a6.275 6.275 0 0 0 -3.929-5.068z'></path>
-                        </svg>
-                      </div>
-                    </div>
-                  </button>
+                  <ThemeSwitch />
                 </div>
               </div>
 
@@ -347,41 +334,94 @@ export default function Home() {
                 <Dialog.Root>
                   <Dialog.Trigger asChild>
                     <Button size='3' variant='solid'>
-                      Read the guide
-                      <span aria-hidden='true' className='text-indigo-200'>
-                        →
-                      </span>
+                      马上登录
                     </Button>
                   </Dialog.Trigger>
                   <Dialog.Portal>
-                    <Dialog.Overlay className='DialogOverlay' />
-                    <Dialog.Content className='DialogContent'>
-                      <Dialog.Title className='DialogTitle'>Edit profile</Dialog.Title>
-                      <Dialog.Description className='DialogDescription'>
-                        Make changes to your profile here. Click save when you are done.
-                      </Dialog.Description>
-                      <fieldset className='Fieldset'>
-                        <label className='Label' htmlFor='name'>
-                          Name
-                        </label>
-                        <input className='Input' id='name' defaultValue='Pedro Duarte' />
-                      </fieldset>
-                      <fieldset className='Fieldset'>
-                        <label className='Label' htmlFor='username'>
-                          Username
-                        </label>
-                        <input className='Input' id='username' defaultValue='@peduarte' />
-                      </fieldset>
-                      <div style={{ display: 'flex', marginTop: 25, justifyContent: 'flex-end' }}>
+                    <Dialog.Overlay className='DialogOverlay fixed inset-0' />
+                    <Dialog.Content className='DialogContent fixed left-1/2 top-1/2 w-[90vw] max-w-screen-sm rounded-md bg-white p-5 shadow-md focus:outline-none sm:w-11/12'>
+                      <Flex justify='between' align='center' className='mb-2.5 border-b pb-2.5'>
+                        <Dialog.Title className='DialogTitle m-0 text-lg font-bold text-gray-600'>
+                          登录掘金畅享更多权益
+                        </Dialog.Title>
                         <Dialog.Close asChild>
-                          <button className='Button green'>Save changes</button>
+                          <button className='inline-flex items-center justify-center' aria-label='Close'>
+                            <Cross2Icon className='text-3xl' />
+                          </button>
                         </Dialog.Close>
+                      </Flex>
+                      <Flex justify='between' align='start' className='pt-2.5 text-gray-600'>
+                        <div className='flex-auto pr-4'>
+                          <Dialog.Description className='mb-4 text-base font-bold leading-none'>
+                            验证码登录 / 注册
+                          </Dialog.Description>
+                          <Form.Root className='w-full space-y-2 text-sm'>
+                            <Form.Field name='email'>
+                              <div className='flex items-center justify-between text-base'>
+                                <Form.Label className='mb-1.5'></Form.Label>
+                                <Form.Message className='FormMessage' match='valueMissing'>
+                                  Please enter your email
+                                </Form.Message>
+                                <Form.Message className='FormMessage' match='typeMismatch'>
+                                  Please provide a valid email
+                                </Form.Message>
+                              </div>
+                              <Form.Control asChild>
+                                <input className='h-12 w-full rounded-sm border bg-gray-50' type='email' required />
+                              </Form.Control>
+                            </Form.Field>
+                            <Form.Field name='password'>
+                              <div className='flex items-center justify-between text-base'>
+                                <Form.Label className='mb-1.5'></Form.Label>
+                                <Form.Message className='FormMessage' match='valueMissing'>
+                                  Please enter a question
+                                </Form.Message>
+                              </div>
+                              <Form.Control asChild>
+                                <input className='h-12 w-full rounded-sm border bg-gray-50' type='password' required />
+                              </Form.Control>
+                            </Form.Field>
+
+                            <div className='grid grid-cols-2 gap-4'>
+                              <Button size='3' variant='soft'>
+                                Sign In
+                              </Button>
+                              <Button size='3' variant='soft' className='h-12 w-full bg-red-500'>
+                                Sign In
+                              </Button>
+                            </div>
+                          </Form.Root>
+                          <Flex justify='between' align='center' className='pt-3 text-sm'>
+                            <Flex align='center'>
+                              <Text>其它登录：</Text>
+                              <Cross2Icon className='text-3xl' />
+                            </Flex>
+                            <Text>密码登录</Text>
+                          </Flex>
+                        </div>
+                        <div className='flex-0 w-[250px] border-l px-4 text-sm'>
+                          <Dialog.Description className='text-base leading-none'>
+                            扫码登录 <Text className='text-xs'>(6.4.1及以上版本支持)</Text>
+                          </Dialog.Description>
+                          <div className='my-2.5 flex items-center justify-start'>
+                            <Skeleton className='h-[144px] w-[144px] border bg-gray-100'></Skeleton>
+                          </div>
+                          <div>
+                            打开 <Text className='text-blue-500'>稀土掘金APP</Text>
+                          </div>
+                          <p>点击“我-左上角扫一扫”登录</p>
+                        </div>
+                      </Flex>
+                      <div className='pt-6 text-center text-sm text-gray-600'>
+                        注册登录即表示同意{' '}
+                        <Link href='/terms' className='text-blue-500'>
+                          用户协议
+                        </Link>{' '}
+                        和{' '}
+                        <Link href='/privacy' className='text-blue-500'>
+                          隐私政策
+                        </Link>
                       </div>
-                      <Dialog.Close asChild>
-                        <button className='IconButton' aria-label='Close'>
-                          <Cross2Icon />
-                        </button>
-                      </Dialog.Close>
                     </Dialog.Content>
                   </Dialog.Portal>
                 </Dialog.Root>
@@ -1154,9 +1194,6 @@ export default function Home() {
               </form>
             </div>
           </div>
-        </div>
-        <div className='container mx-auto mt-10'>
-          <ThemeSwitch />
         </div>
       </div>
     </>

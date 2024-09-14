@@ -1,8 +1,9 @@
 import React from 'react'
 import * as Popover from '@radix-ui/react-popover'
 import { useTheme } from 'next-themes'
+import { MdLightMode, MdDarkMode } from 'react-icons/md'
+import { IoIosBatteryCharging } from 'react-icons/io'
 
-import { ContainerIcon } from '@radix-ui/react-icons'
 const ThemeSwitch = () => {
   const { theme, setTheme } = useTheme()
   const isDarkMode = theme === 'dark' ?? false
@@ -18,17 +19,17 @@ const ThemeSwitch = () => {
     <>
       <Popover.Root>
         <Popover.Trigger asChild>
-          <button className='mb-2 me-2 rounded-lg bg-blue-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'>
-            切换
+          <button type='button' className='relative inline-block rounded-full px-3 py-2 hover:bg-gray-200'>
+            <div className='flex h-5 items-center'>{isDarkMode ? <MdDarkMode /> : <MdLightMode />}</div>
           </button>
         </Popover.Trigger>
         <Popover.Portal>
           <Popover.Content sideOffset={5}>
-            <div className='z-10 w-[288px] rounded-2xl dark:bg-[#26242e]'>
+            <div className='z-10 w-[288px] rounded-2xl bg-white dark:bg-[#26242e]'>
               <div className='relative flex flex-col rounded-2xl bg-inherit shadow-lg'>
                 <div className='flex items-center justify-between px-7 py-3 text-sm text-gray-600 dark:text-white'>
                   <div onClick={() => toggleDarkMode()}>{today}</div>
-                  <ContainerIcon />
+                  <IoIosBatteryCharging />
                 </div>
                 <div style={{ transform: 'translateY(5%)' }} className='mx-auto flex w-[70%] flex-col text-center'>
                   <div className='relative mx-auto h-32 w-32 rounded-full bg-gradient-to-b from-yellow-500 to-red-500 dark:from-indigo-400 dark:to-sky-200'>
@@ -52,7 +53,7 @@ const ThemeSwitch = () => {
                 </div>
               </div>
             </div>
-            <Popover.Arrow className='PopoverArrow' />
+            <Popover.Arrow className='fill-gray-200 dark:fill-[#26242e]' />
           </Popover.Content>
         </Popover.Portal>
       </Popover.Root>
