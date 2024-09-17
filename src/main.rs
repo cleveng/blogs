@@ -171,10 +171,11 @@ async fn use_lua() -> String {
 
 async fn postgres() -> String {
     let (client, connection) = tokio_postgres::connect(
-        "host=0.0.0.0 port=5432 user=homestead password=secret dbname=oa",
+        "host=0.0.0.0 port=5432 user=homestead password=secret dbname=homestead",
         NoTls,
     )
-    .await.expect("connect failed");
+    .await
+    .expect("connect failed");
 
     tokio::spawn(async move {
         if let Err(e) = connection.await {
@@ -184,7 +185,8 @@ async fn postgres() -> String {
 
     let rows = client
         .query("SELECT id, name, app FROM accounts", &[])
-        .await.expect("query failed");
+        .await
+        .expect("query failed");
 
     let value: &str = rows[0].get(2);
 
