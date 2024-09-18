@@ -12,6 +12,7 @@ mod models;
 mod repository;
 mod routes;
 mod services;
+mod utils;
 
 use crate::conf::conf::Bootstrap;
 

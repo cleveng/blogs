@@ -1,49 +1,71 @@
+use chrono::Utc;
+use jsonwebtoken::{encode, Algorithm, EncodingKey, Header};
+use serde::{Deserialize, Serialize};
+use std::fmt::Error;
+
 /// graphql
-use async_graphql::{Context, EmptyMutation, Object, Schema};
+use async_graphql::{Context, Object, Schema};
 use async_graphql_axum::{GraphQLRequest, GraphQLResponse};
 use axum::Extension;
-use tokio_postgres::NoTls;
-
 
 pub async fn graphql_handler(
-    schema: Extension<Schema<Query, EmptyMutation, async_graphql::EmptySubscription>>,
+    schema: Extension<Schema<Query, Mutation, async_graphql::EmptySubscription>>,
     req: GraphQLRequest,
 ) -> GraphQLResponse {
     schema.execute(req.into_inner()).await.into()
 }
 
-pub fn create_schema() -> Schema<Query, EmptyMutation, async_graphql::EmptySubscription> {
-    Schema::build(Query, EmptyMutation, async_graphql::EmptySubscription).finish()
+pub fn create_schema() -> Schema<Query, Mutation, async_graphql::EmptySubscription> {
+    Schema::build(Query, Mutation, async_graphql::EmptySubscription).finish()
 }
 
 pub struct Query;
 
 #[Object]
 impl Query {
-    async fn hello(&self, _ctx: &Context<'_>) -> &str {
-        let mut cfg = deadpool_postgres::Config::new();
-        cfg.host = Some("0.0.0.0".to_string());
-        cfg.dbname = Some("oa".to_string());
-        cfg.user = Some("homestead".to_string());
-        cfg.password = Some("secret".to_string());
-
-        cfg.manager = Some(deadpool_postgres::ManagerConfig {
-            recycling_method: deadpool_postgres::RecyclingMethod::Fast,
-        });
-
-        let pool = cfg
-            .create_pool(Some(deadpool_postgres::Runtime::Tokio1), NoTls)?;
-
-        let client = pool.get().await.expect("get client failed");
-
-        let row = client
-            .query_one("SELECT id, name, app FROM accounts limit 1", &[])
-            .await
-            .expect("query failed");
-
-        let name: String = row.get(1);
-        println!("name: {}", name);
-
-        "hello world"
+    async fn hello(&self, _ctx: &Context<'_>) -> Result<String, Error> {
+        Result::Ok("hello world!!!!".to_string())
     }
+}
+
+pub struct Mutation;
+
+#[Object]
+impl Mutation {
+    async fn signup(&self, username: String, password: String) -> Result<bool, Error> {
+        println!("{}, {}", username, password);
+        Result::Ok(true)
+    }
+
+    async fn login(&self, username: String, password: String) -> Result<String, Error> {
+        let mut header = Header::new(Algorithm::HS512);
+        header.kid = Some("blabla".to_owned());
+
+        let now = Utc::now();
+
+        let my_claims = Claims {
+            user_id: username,
+            exp: now.timestamp() as usize,
+            nbf: 123456789,
+            iat: 123456789,
+        };
+
+        let token = encode(
+            &header,
+            &my_claims,
+            &EncodingKey::from_secret(password.as_ref()),
+        )
+        .unwrap();
+
+        Result::Ok(token)
+    }
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct Claims {
+    #[serde(rename = "UserId")]
+    user_id: String,
+    exp: usize,
+    nbf: usize,
+    iat: usize,
 }
