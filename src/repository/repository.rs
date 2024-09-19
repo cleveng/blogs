@@ -1,24 +1,30 @@
+use slog::{o, Drain, Logger};
+use slog_async;
+use slog_term;
 use tokio_postgres::NoTls;
 
 use crate::conf::conf::{Bootstrap, Database, Redis};
 use std::error::Error;
-use std::string::String as Str;
 
+#[derive(Debug)]
 pub struct Repository {
     pub pool: deadpool_postgres::Pool,
     pub rdb: redis::Client,
-    pub logger: Str,
+    pub logger: Logger,
 }
 
 pub fn init_repository(config: Bootstrap) -> Result<Repository, Box<dyn Error>> {
     let pool = init_db(config.database);
     let rdb = init_redis(config.redis);
 
-    Ok(Repository {
-        pool,
-        rdb,
-        logger: String::from("test"),
-    })
+    let decorator = slog_term::TermDecorator::new().build();
+    let drain = slog_term::FullFormat::new(decorator).build().fuse();
+    let drain = slog_async::Async::new(drain).build().fuse();
+
+    // 创建 Logger
+    let logger = Logger::root(drain, o!("version" => "0.1"));
+
+    Ok(Repository { pool, rdb, logger })
 }
 
 fn init_db(config: Database) -> deadpool_postgres::Pool {

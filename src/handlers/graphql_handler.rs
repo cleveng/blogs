@@ -1,4 +1,5 @@
 use chrono::Utc;
+
 use jsonwebtoken::{encode, Algorithm, EncodingKey, Header};
 use serde::{Deserialize, Serialize};
 use std::fmt::Error;
@@ -15,16 +16,19 @@ pub async fn graphql_handler(
     schema.execute(req.into_inner()).await.into()
 }
 
-pub fn create_schema() -> Schema<Query, Mutation, async_graphql::EmptySubscription> {
-    Schema::build(Query, Mutation, async_graphql::EmptySubscription).finish()
+pub fn schema() -> Schema<Query, Mutation, async_graphql::EmptySubscription> {
+    Schema::build(Query, Mutation, async_graphql::EmptySubscription)
+        .data("good".to_string())
+        .finish()
 }
 
 pub struct Query;
 
 #[Object]
 impl Query {
-    async fn hello(&self, _ctx: &Context<'_>) -> Result<String, Error> {
-        Result::Ok("hello world!!!!".to_string())
+    async fn hello(&self, ctx: &Context<'_>) -> Result<String, Error> {
+        let value = ctx.data::<String>().unwrap();
+        Result::Ok(value.to_string())
     }
 }
 

@@ -1,8 +1,6 @@
-extern crate log;
-extern crate pretty_env_logger;
-
 use axum::Router;
 use log::info;
+use pretty_env_logger;
 use std::fs;
 use std::path::Path;
 
@@ -25,16 +23,19 @@ fn init() -> Bootstrap {
 }
 
 pub async fn run() {
+    // 初始化日志
     pretty_env_logger::init();
 
-    // 解析服务器ip和端口号
+    // 解析配置文件
     let config: Bootstrap = init();
     let addr = config.get_server_url();
 
+    // 初始化路由
     let app = Router::new();
     let app = app.clone().merge(routes::api_route::api_route());
     let app = app.clone().merge(routes::graphql_route::graphql_route());
 
+    // 启动服务
     let listener = tokio::net::TcpListener::bind(&addr).await.unwrap();
 
     info!("the server is running,  url: https://{} ", addr);
