@@ -1,8 +1,5 @@
 {
-  "editor.codeActionsOnSave": [
-    "source.organizeImports",
-    "source.fixAll"
-  ],
+  "editor.codeActionsOnSave": ["source.organizeImports", "source.fixAll"],
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "[javascript]": {
@@ -20,17 +17,7 @@
   "[scss]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  "stylelint.validate": [
-    "css",
-    "scss"
-  ],
-  "cSpell.words": [
-    "dbname",
-    "deadpool",
-    "graphiql"
-  ],
-  "i18n-ally.localesPaths": [
-    "messages",
-    "src/i18n"
-  ]
+  "stylelint.validate": ["css", "scss"],
+  "cSpell.words": ["dbname", "deadpool", "graphiql"],
+  "i18n-ally.localesPaths": ["messages", "src/i18n"]
 }
