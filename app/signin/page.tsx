@@ -1,6 +1,7 @@
-import { Skeleton, Text, Box, Flex } from '@radix-ui/themes'
-import Link from 'next/link'
 import * as Separator from '@radix-ui/react-separator'
+import { Box, Flex, Skeleton, Text } from '@radix-ui/themes'
+import Link from 'next/link'
+
 import { version } from '@config/index'
 
 const Page = () => {

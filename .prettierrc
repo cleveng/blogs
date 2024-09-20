@@ -7,7 +7,11 @@
   "arrowParens": "avoid",
   "printWidth": 120,
   "tabWidth": 2,
-  "plugins": [
-    "prettier-plugin-tailwindcss"
-  ]
+  "plugins": [],
+  "importOrder": [
+    "^@?\\w",
+    "^[./]"
+  ],
+  "importOrderSeparation": true,
+  "importOrderSortSpecifiers": true
 }

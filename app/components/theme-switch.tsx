@@ -1,8 +1,7 @@
-import React from 'react'
 import * as Popover from '@radix-ui/react-popover'
 import { useTheme } from 'next-themes'
-import { MdLightMode, MdDarkMode } from 'react-icons/md'
 import { IoIosBatteryCharging } from 'react-icons/io'
+import { MdDarkMode, MdLightMode } from 'react-icons/md'
 
 const ThemeSwitch = () => {
   const { theme, setTheme } = useTheme()

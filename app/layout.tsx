@@ -1,13 +1,13 @@
-import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import { NextIntlClientProvider } from 'next-intl'
 import { getLocale, getMessages } from 'next-intl/server'
+import React from 'react'
 
+import DefaultLayout from '@layouts/default'
+
+import type { Metadata } from 'next'
 import './assets/styles/app.scss'
 import './assets/styles/radix-ui.css'
-
-import React from 'react'
-import DefaultLayout from '@layouts/default'
 
 const inter = Inter({ subsets: ['latin'] })
 

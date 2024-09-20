@@ -1,8 +1,8 @@
-import { Button, Grid, Link, Text } from '@radix-ui/themes'
-import * as Form from '@radix-ui/react-form'
 import * as Checkbox from '@radix-ui/react-checkbox'
+import * as Form from '@radix-ui/react-form'
 import { CheckIcon } from '@radix-ui/react-icons'
 import * as Separator from '@radix-ui/react-separator'
+import { Button, Grid, Link, Text } from '@radix-ui/themes'
 
 const Page = () => {
   return (

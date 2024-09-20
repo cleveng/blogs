@@ -1,6 +1,6 @@
+import { ApolloClient, InMemoryCache, NormalizedCacheObject } from '@apollo/client'
 import merge from 'deepmerge'
 import isEqual from 'lodash-es/isEqual'
-import { ApolloClient, InMemoryCache, NormalizedCacheObject } from '@apollo/client'
 
 let apolloClient: ApolloClient<NormalizedCacheObject> | null
 

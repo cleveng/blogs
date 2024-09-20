@@ -506,6 +506,7 @@ dependencies = [
  "chrono",
  "clap",
  "deadpool-postgres",
+ "deadpool-redis",
  "futures",
  "grpc",
  "html",
@@ -517,7 +518,7 @@ dependencies = [
  "pretty_env_logger",
  "protobuf 3.5.1",
  "protoc-rust-grpc",
- "redis",
+ "redis 0.27.2",
  "rusttype",
  "salsa",
  "serde",
@@ -939,6 +940,16 @@ dependencies = [
  "tokio 1.40.0",
  "tokio-postgres",
  "tracing",
+]
+
+[[package]]
+name = "deadpool-redis"
+version = "0.17.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "3e081657a45476ddeefff90d0beb55446a50a77eb76b37387fbd6dd8f8e6210d"
+dependencies = [
+ "deadpool",
+ "redis 0.26.1",
 ]
 
 [[package]]
@@ -2902,6 +2913,27 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "678054eb77286b51581ba43620cc911abf02758c91f93f479767aed0f90458b2"
 dependencies = [
  "rand_core 0.3.1",
+]
+
+[[package]]
+name = "redis"
+version = "0.26.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e902a69d09078829137b4a5d9d082e0490393537badd7c91a3d69d14639e115f"
+dependencies = [
+ "arc-swap",
+ "async-trait",
+ "bytes 1.7.2",
+ "combine",
+ "futures-util",
+ "itoa",
+ "num-bigint",
+ "percent-encoding",
+ "pin-project-lite 0.2.14",
+ "ryu",
+ "tokio 1.40.0",
+ "tokio-util",
+ "url",
 ]
 
 [[package]]

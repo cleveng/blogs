@@ -2,21 +2,23 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 'use client'
 
-import { Box, Flex, Button, Card, Container, Skeleton, Grid, Inset, Strong, Text } from '@radix-ui/themes'
-import Link from 'next/link'
-import React, { useEffect, useState } from 'react'
-import { useTranslations } from 'next-intl'
-import * as Dialog from '@radix-ui/react-dialog'
-import { Cross2Icon, StarFilledIcon } from '@radix-ui/react-icons'
-import { useTheme } from 'next-themes'
-import Image from 'next/image'
-import ThemeSwitch from '@/app/components/theme-switch'
-import * as Form from '@radix-ui/react-form'
 import { Signatory } from '@cakioe/kit.js'
+import * as Dialog from '@radix-ui/react-dialog'
+import * as Form from '@radix-ui/react-form'
+import { Cross2Icon, StarFilledIcon } from '@radix-ui/react-icons'
+import { Box, Button, Card, Container, Flex, Grid, Inset, Skeleton, Strong, Text } from '@radix-ui/themes'
+import Image from 'next/image'
+import Link from 'next/link'
+import { useTranslations } from 'next-intl'
+import { useTheme } from 'next-themes'
+import { useEffect, useState } from 'react'
+
+import ThemeSwitch from '@/app/components/theme-switch'
+
 import { appid, version } from './config'
 
 export default function Home() {
-  const singer = new Signatory('ck069ed4223ac1660f')
+  const singer = new Signatory(appid)
 
   const { theme, setTheme } = useTheme()
   const isDarkMode = theme === 'dark' ?? false
