@@ -18,6 +18,11 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "stylelint.validate": ["css", "scss"],
-  "cSpell.words": ["dbname", "deadpool", "graphiql"],
+  "cSpell.words": [
+    "actix",
+    "dbname",
+    "deadpool",
+    "graphiql"
+  ],
   "i18n-ally.localesPaths": ["messages", "src/i18n"]
 }
