@@ -1,4 +1,6 @@
-#[tokio::main]
-async fn main() {
-    blogs::run().await;
+use blogs::run;
+
+#[actix_web::main]
+async fn main() -> std::io::Result<()> {
+    run().await
 }
