@@ -24,5 +24,11 @@
     "deadpool",
     "graphiql"
   ],
-  "i18n-ally.localesPaths": ["messages", "src/i18n"]
+  "i18n-ally.localesPaths": [
+    "messages",
+    "src/i18n"
+  ],
+  "[ignore]": {
+    "editor.defaultFormatter": "foxundermoon.shell-format"
+  }
 }

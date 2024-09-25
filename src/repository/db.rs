@@ -1,14 +1,16 @@
+use crate::configs::config::Database;
+
 use deadpool_postgres::{Config, ManagerConfig, Pool, RecyclingMethod, Runtime};
 use std::error::Error;
 use tokio_postgres::NoTls;
 
-pub async fn get_db_pool() -> Result<Pool, Box<dyn Error>> {
+pub async fn get_db_pool(config: &Database) -> Result<Pool, Box<dyn Error>> {
     let mut cfg = Config::new();
-    cfg.user = Some("homestead".to_string());
-    cfg.password = Some("secret".to_string());
-    cfg.host = Some("127.0.0.1".to_string());
-    cfg.port = Some(5432);
-    cfg.dbname = Some("oa".to_string());
+    cfg.user = Some(config.username.clone());
+    cfg.password = Some(config.password.clone());
+    cfg.host = Some(config.host.clone());
+    cfg.port = Some(config.port);
+    cfg.dbname = Some(config.db.clone());
     cfg.manager = Some(ManagerConfig {
         recycling_method: RecyclingMethod::Fast,
     });

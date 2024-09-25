@@ -1,0 +1,20 @@
+
+[server]
+host = "127.0.0.1"
+port = 8090
+
+[database]
+host = "0.0.0.0"
+port = 5432
+username = "root"
+password = "secret"
+db = "oa"
+
+[redis]
+host = "0.0.0.0"
+port = 6379
+password = ""
+db = 4
+
+[jwt]
+secret = "secret"
