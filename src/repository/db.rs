@@ -1,9 +1,7 @@
-/// lib.rs
 use deadpool_postgres::{Config, ManagerConfig, Pool, RecyclingMethod, Runtime};
 use std::error::Error;
 use tokio_postgres::NoTls;
 
-/// 创建数据库连接池
 pub async fn get_db_pool() -> Result<Pool, Box<dyn Error>> {
     let mut cfg = Config::new();
     cfg.user = Some("homestead".to_string());
