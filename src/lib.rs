@@ -1,6 +1,6 @@
 /// lib.rs
 use actix_web::{
-    guard, middleware,
+    guard,
     web::{self, Data},
     App, HttpServer,
 };
@@ -8,11 +8,10 @@ use deadpool_postgres::Pool as PgPool;
 use deadpool_redis::Pool as RedisPool;
 use log::warn;
 use serde::Serialize;
-use std::error::Error;
-
 
 mod configs;
 mod handler;
+mod middleware;
 mod model;
 mod repository;
 mod schemas;
@@ -22,6 +21,7 @@ use crate::handler::web_handler::not_found;
 use crate::repository::{db, rdb};
 use handler::graphql_handler::{graphql_entry, graphql_playground, schema};
 use handler::web_handler::root;
+use middleware::appid::Appid;
 
 #[derive(Clone)]
 pub struct AppState {
@@ -70,23 +70,32 @@ pub async fn run() -> std::io::Result<()> {
 
     HttpServer::new(move || {
         // root route
-        let home = web::resource("/").app_data(Data::new(state.clone())).route(web::get().to(root));
+        let home = web::resource("/")
+            .app_data(Data::new(state.clone()))
+            .route(web::get().to(root));
 
-        /// graphql route
+        // graphql route
         let graphiql = web::resource("/graphql")
+            .wrap(Appid)
             .app_data(Data::new(schema(state.clone())))
             .route(if cfg!(debug_assertions) {
                 web::get().to(graphql_playground)
             } else {
                 web::get().to(not_found)
             })
-            .route(web::post().guard(guard::Header("content-type", "application/json")).to(graphql_entry));
+            .route(
+                web::post()
+                    .guard(guard::Header("content-type", "application/json"))
+                    .to(graphql_entry),
+            );
 
-        App::new().wrap(middleware::Logger::default())
+        App::new()
+            .wrap(actix_web::middleware::Logger::default())
             .service(home)
             .service(graphiql)
+            .default_service(web::route().to(not_found))
     })
-        .bind(address)?
-        .run()
-        .await
+    .bind(address)?
+    .run()
+    .await
 }

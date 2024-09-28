@@ -26,6 +26,10 @@ dotenv = "0.15.0"
 async-graphql = "7.0.11"
 async-graphql-actix-web = "7.0.11"
 jsonwebtoken = "9.3.0"
+base64 = "0.22.1"
+md5 = "0.7.0"
+signatory_kit = "1.0.0"
+futures-util = "0.3.30"
 
 [build-dependencies]
 

@@ -750,16 +750,20 @@ dependencies = [
  "actix-web",
  "async-graphql",
  "async-graphql-actix-web",
+ "base64 0.22.1",
  "chrono",
  "deadpool-postgres",
  "deadpool-redis",
  "dotenv",
  "env_logger",
+ "futures-util",
  "jsonwebtoken",
  "log",
+ "md5",
  "redis",
  "serde",
  "serde_json",
+ "signatory_kit",
  "sqlx",
  "tokio",
  "tokio-postgres",
@@ -1802,6 +1806,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "md5"
+version = "0.7.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "490cc448043f947bae3cbee9c203358d62dbee0db12107a74be5c30ccfd09771"
+
+[[package]]
 name = "memchr"
 version = "2.7.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2515,6 +2525,19 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a9e9e0b4211b72e7b8b6e85c807d36c212bdb33ea8587f7569562a84df5465b1"
 dependencies = [
  "libc",
+]
+
+[[package]]
+name = "signatory_kit"
+version = "1.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b67e3531dad11e2eb1302962db4e0b3ec13a239b8cf43acb4bb1654718040139"
+dependencies = [
+ "base64 0.22.1",
+ "chrono",
+ "md5",
+ "serde",
+ "serde_json",
 ]
 
 [[package]]

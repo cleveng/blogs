@@ -1,6 +1,5 @@
 use crate::AppState;
-use actix_web::web::Data;
-use actix_web::HttpResponse;
+use actix_web::{web::Data, HttpRequest, HttpResponse};
 use async_graphql::http::{playground_source, GraphQLPlaygroundConfig};
 use async_graphql::{Context, EmptySubscription, Error, Object, Schema};
 use async_graphql_actix_web::{GraphQLRequest, GraphQLResponse};
@@ -35,8 +34,19 @@ pub fn schema(state: AppState) -> Schema<Query, Mutation, EmptySubscription> {
         .finish()
 }
 
-pub async fn graphql_entry(schema: Data<ProjectSchema>, req: GraphQLRequest) -> GraphQLResponse {
-    schema.execute(req.into_inner()).await.into()
+pub async fn graphql_entry(
+    schema: Data<ProjectSchema>,
+    req: HttpRequest,
+    gql_request: GraphQLRequest,
+) -> GraphQLResponse {
+    // Extract the `appid` header
+    let request = gql_request.into_inner();
+
+    if let Some(appid) = req.headers().get("appid") {
+        println!("{}", appid.to_str().unwrap().to_string());
+    }
+
+    schema.execute(request).await.into()
 }
 
 pub async fn graphql_playground() -> HttpResponse {
