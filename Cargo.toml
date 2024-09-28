@@ -20,10 +20,14 @@ tokio-postgres = "0.7.12"
 chrono = { version = "0.4.38", features = ["serde"] }
 deadpool-redis = { version = "0.18.0", features = ["serde"] }
 redis = { version = "0.27.2", default-features = false, features = [] }
-toml = "0.7.3"
+toml = "0.8.19"
+sqlx = { version = "0.8.2", features = ["runtime-async-std"] }
+dotenv = "0.15.0"
+async-graphql = "7.0.11"
+async-graphql-actix-web = "7.0.11"
+jsonwebtoken = "9.3.0"
 
 [build-dependencies]
-
 
 [profile.dev]
 incremental = true

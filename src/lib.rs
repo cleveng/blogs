@@ -1,23 +1,30 @@
 /// lib.rs
-use actix_web::{middleware, web, App, HttpResponse, HttpServer};
+use actix_web::{
+    guard, middleware,
+    web::{self, Data},
+    App, HttpServer,
+};
 use deadpool_postgres::Pool as PgPool;
 use deadpool_redis::Pool as RedisPool;
 use log::warn;
 use serde::Serialize;
 use std::error::Error;
-use std::fs;
-use std::path::Path;
+
 
 mod configs;
+mod handler;
 mod model;
 mod repository;
+mod schemas;
 
-use crate::configs::config::Bootstrap;
-use crate::model::account::AccountModel;
+use crate::configs::config::init_config;
+use crate::handler::web_handler::not_found;
 use crate::repository::{db, rdb};
+use handler::graphql_handler::{graphql_entry, graphql_playground, schema};
+use handler::web_handler::root;
 
 #[derive(Clone)]
-struct AppState {
+pub struct AppState {
     #[warn(dead_code)]
     db_pool: PgPool,
     #[warn(dead_code)]
@@ -29,84 +36,57 @@ struct ErrorResponse {
     error: String,
 }
 
-fn init_config() -> Result<Bootstrap, Box<dyn Error>> {
-    let path = Path::new("src/configs/config.toml");
-    if !path.exists() {
-        warn!("Config file not found");
-        return Err("Config file not found".into());
-    }
-
-    let content = match fs::read_to_string(path) {
-        Ok(content) => content,
-        Err(_) => {
-            return Err("Failed to read config file".into());
-        }
-    };
-
-    let result = toml::from_str(&content).expect("Failed to parse config file");
-    Ok(result)
-}
-
-async fn root(state: web::Data<AppState>) -> HttpResponse {
-    let db = match state.db_pool.get().await {
-        Ok(pool) => pool,
-        Err(_) => {
-            return HttpResponse::BadRequest().json(ErrorResponse {
-                error: "Failed to query the database".to_string(),
-            });
-        }
-    };
-
-    let row = match db.query_one("SELECT * from role_user", &[]).await {
-        Ok(row) => row,
-        Err(_) => {
-            return HttpResponse::BadRequest().json(ErrorResponse {
-                error: "Failed to query the database".to_string(),
-            })
-        }
-    };
-
-    let account = AccountModel {
-        user_id: row.get(0),
-        role_id: row.get(1),
-    };
-
-    HttpResponse::Ok().json(account)
+#[derive(Serialize)]
+struct SuccessResponse<T> {
+    error: String,
+    data: T,
+    code: i64,
 }
 
 pub async fn run() -> std::io::Result<()> {
-    let conf = match init_config() {
-        Ok(conf) => conf,
-        Err(e) => {
-            panic!("Failed to load config: {:?}", e);
-        }
-    };
-
+    let conf = init_config("src/configs/config.toml").unwrap();
     let address = conf.get_server_url();
 
     // 创建数据库连接池
-    let db_pool = db::get_db_pool(&conf.database).await;
-    if db_pool.is_err() {
-        panic!("Failed to create pool: {:?}", db_pool.unwrap_err());
-    }
+    let db_pool = match db::get_db_pool(&conf.database).await {
+        Ok(pool) => pool,
+        Err(e) => {
+            panic!("Failed to create database pool: {:?}", e);
+        }
+    };
 
-    let rdb_pool = rdb::get_rdb_pool(&conf.redis).await;
-    if rdb_pool.is_err() {
-        panic!("Failed to create pool: {:?}", rdb_pool.unwrap_err());
-    }
+    // 创建Redis连接池
+    let rdb_pool = match rdb::get_rdb_pool(&conf.redis).await {
+        Ok(pool) => pool,
+        Err(e) => {
+            panic!("Failed to create redis pool: {:?}", e);
+        }
+    };
 
     let state: AppState = AppState {
-        db_pool: db_pool.unwrap().clone(),
-        rdb_pool: rdb_pool.unwrap().clone(),
+        db_pool: db_pool.clone(),
+        rdb_pool: rdb_pool.clone(),
     };
 
     HttpServer::new(move || {
-        App::new()
-            .wrap(middleware::Logger::default())
-            .app_data(web::Data::new(state.clone()))
-            .route("/", web::get().to(root))
+        // root route
+        let home = web::resource("/").app_data(Data::new(state.clone())).route(web::get().to(root));
+
+        /// graphql route
+        let graphiql = web::resource("/graphql")
+            .app_data(Data::new(schema(state.clone())))
+            .route(if cfg!(debug_assertions) {
+                web::get().to(graphql_playground)
+            } else {
+                web::get().to(not_found)
+            })
+            .route(web::post().guard(guard::Header("content-type", "application/json")).to(graphql_entry));
+
+        App::new().wrap(middleware::Logger::default())
+            .service(home)
+            .service(graphiql)
     })
-    .bind(address)?
-    .run()
-    .await
+        .bind(address)?
+        .run()
+        .await
 }

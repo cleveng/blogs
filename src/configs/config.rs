@@ -1,4 +1,8 @@
+use log::warn;
 use serde::Deserialize;
+use std::error::Error;
+use std::fs;
+use std::path::Path;
 
 #[derive(Deserialize)]
 pub struct Bootstrap {
@@ -32,9 +36,7 @@ pub struct Database {
 pub struct Redis {
     pub host: String,
     pub port: u16,
-    #[warn(dead_code)]
     pub password: String,
-    #[warn(dead_code)]
     pub db: u16,
 }
 
@@ -46,6 +48,35 @@ pub struct Jwt {
 
 impl Redis {
     pub fn get_url(&self) -> String {
-        format!("redis://{}:{}", self.host, self.port)
+        format!(
+            "redis://:{}@{}:{}/{}",
+            self.password, self.host, self.port, self.db
+        )
     }
+}
+
+impl Jwt {
+    #[warn(dead_code)]
+    pub fn get_secret(&self) -> String {
+        self.secret.clone()
+    }
+}
+
+pub fn init_config(path: &str) -> Result<Bootstrap, Box<dyn Error>> {
+    let path = Path::new(path);
+    if !path.exists() {
+        warn!("Config file not found");
+        return Err("Config file not found".into());
+    }
+
+    let content = match fs::read_to_string(path) {
+        Ok(content) => content,
+        Err(_) => {
+            warn!("Failed to read config file");
+            return Err("Failed to read config file".into());
+        }
+    };
+
+    let result = toml::from_str(&content).expect("Failed to parse config file");
+    Ok(result)
 }

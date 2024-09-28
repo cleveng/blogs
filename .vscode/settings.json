@@ -20,6 +20,7 @@
   "stylelint.validate": ["css", "scss"],
   "cSpell.words": [
     "actix",
+    "chrono",
     "dbname",
     "deadpool",
     "graphiql"
