@@ -18,3 +18,7 @@ db = 4
 
 [jwt]
 secret = "secret"
+
+[google]
+client_id = ""
+client_secret = ""

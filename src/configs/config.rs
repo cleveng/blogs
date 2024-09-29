@@ -9,6 +9,7 @@ pub struct Bootstrap {
     pub server: Server,
     pub database: Database,
     pub redis: Redis,
+    pub google: Google,
 }
 
 #[derive(Deserialize)]
@@ -46,6 +47,12 @@ pub struct Jwt {
     pub secret: String,
 }
 
+#[derive(Deserialize, Clone)]
+pub struct Google {
+    pub client_id: String,
+    pub client_secret: String,
+}
+
 impl Redis {
     pub fn get_url(&self) -> String {
         format!(
@@ -59,6 +66,16 @@ impl Jwt {
     #[warn(dead_code)]
     pub fn get_secret(&self) -> String {
         self.secret.clone()
+    }
+}
+
+impl Google {
+    pub fn get_client_id(&self) -> String {
+        self.client_id.clone()
+    }
+
+    pub fn get_client_secret(&self) -> String {
+        self.client_secret.clone()
     }
 }
 

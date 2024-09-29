@@ -30,6 +30,8 @@ base64 = "0.22.1"
 md5 = "0.7.0"
 signatory_kit = "1.0.0"
 futures-util = "0.3.30"
+oauth2 = "4.4.2"
+reqwest = "0.11.18"
 
 [build-dependencies]
 

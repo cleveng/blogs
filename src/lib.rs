@@ -11,6 +11,7 @@ use serde::Serialize;
 use std::env;
 use std::process;
 
+
 mod configs;
 mod handler;
 mod middleware;
@@ -18,7 +19,7 @@ mod model;
 mod repository;
 mod schemas;
 
-use crate::configs::config::init_config;
+use crate::configs::config::{init_config, Google};
 use crate::handler::web_handler::not_found;
 use crate::repository::{db, rdb};
 use handler::graphql_handler::{graphql_entry, graphql_playground, schema};
@@ -31,6 +32,8 @@ pub struct AppState {
     db_pool: PgPool,
     #[warn(dead_code)]
     rdb_pool: RedisPool,
+    #[warn(dead_code)]
+    google: Google,
 }
 
 #[derive(Serialize)]
@@ -55,12 +58,11 @@ impl Config {
             return Err("Must pass 1 arguments, eg: cargo run -- config **".to_string());
         }
         let path = value[2].clone();
-        Ok(Config { path: path })
+        Ok(Config { path })
     }
 }
 
 pub async fn run() -> std::io::Result<()> {
-    // cargo run -- config src/configs/config.toml
     let args: Vec<String> = env::args().collect();
     let config = Config::new(&args).unwrap_or_else(|err| {
         println!("ERROR: {err}");
@@ -89,6 +91,7 @@ pub async fn run() -> std::io::Result<()> {
     let state: AppState = AppState {
         db_pool: db_pool.clone(),
         rdb_pool: rdb_pool.clone(),
+        google: conf.google.clone(),
     };
 
     HttpServer::new(move || {
@@ -96,6 +99,7 @@ pub async fn run() -> std::io::Result<()> {
         let home = web::resource("/")
             .app_data(Data::new(state.clone()))
             .route(web::get().to(root));
+
 
         // graphql route
         let graphiql = web::resource("/graphql")
@@ -116,9 +120,10 @@ pub async fn run() -> std::io::Result<()> {
             .wrap(actix_web::middleware::Logger::default())
             .service(home)
             .service(graphiql)
+            .route("/auth/login", web::get().to(handler::web_handler::login))
             .default_service(web::route().to(not_found))
     })
-    .bind(address)?
-    .run()
-    .await
+        .bind(address)?
+        .run()
+        .await
 }
