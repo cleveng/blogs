@@ -8,6 +8,8 @@ use deadpool_postgres::Pool as PgPool;
 use deadpool_redis::Pool as RedisPool;
 use log::warn;
 use serde::Serialize;
+use std::env;
+use std::process;
 
 mod configs;
 mod handler;
@@ -43,8 +45,29 @@ struct SuccessResponse<T> {
     code: i64,
 }
 
+struct Config {
+    path: String,
+}
+
+impl Config {
+    fn new(value: &Vec<String>) -> Result<Config, String> {
+        if value.len() != 3 {
+            return Err("Must pass 1 arguments, eg: cargo run -- config **".to_string());
+        }
+        let path = value[2].clone();
+        Ok(Config { path: path })
+    }
+}
+
 pub async fn run() -> std::io::Result<()> {
-    let conf = init_config("src/configs/config.toml").unwrap();
+    // cargo run -- config src/configs/config.toml
+    let args: Vec<String> = env::args().collect();
+    let config = Config::new(&args).unwrap_or_else(|err| {
+        println!("ERROR: {err}");
+        process::exit(1);
+    });
+
+    let conf = init_config(config.path.as_str()).unwrap();
     let address = conf.get_server_url();
 
     // 创建数据库连接池
