@@ -31,7 +31,9 @@ md5 = "0.7.0"
 signatory_kit = "1.0.0"
 futures-util = "0.3.30"
 oauth2 = "4.4.2"
-reqwest = "0.11.18"
+reqwest = { version = "0.12.7", features = ["json"] }
+anyhow = "1.0.89"
+actix-cors = "0.6.4"
 
 [build-dependencies]
 

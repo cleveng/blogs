@@ -4,7 +4,9 @@ use actix_web::web::Data;
 use actix_web::{web, HttpResponse, Responder};
 use oauth2::basic::BasicClient;
 use oauth2::reqwest::async_http_client;
-use oauth2::{AuthUrl, AuthorizationCode, ClientId, ClientSecret, CsrfToken, RedirectUrl, Scope, TokenUrl};
+use oauth2::{AuthUrl, AuthorizationCode, ClientId, ClientSecret, CsrfToken, RedirectUrl, Scope, TokenResponse, TokenUrl};
+use reqwest::Client;
+use serde::{Deserialize, Serialize};
 use signatory_kit::Signatory;
 use std::collections::HashMap;
 
@@ -74,8 +76,18 @@ pub async fn login(state: Data<AppState>, query: web::Query<HashMap<String, Stri
         .request_async(async_http_client).await;
 
     match result {
-        Ok(token) => HttpResponse::Ok().body(format!("Access Token: {:?}", token)),
-        Err(err) => HttpResponse::InternalServerError().body(format!("Error: {}", err)),
+        Ok(token) => {
+            let user_info = get_google_user_info(&token.access_token().secret()).await;
+            match user_info {
+                Ok(user_info) => {
+                    HttpResponse::Ok().json(user_info)
+                }
+                Err(err) => {
+                    HttpResponse::InternalServerError().body(format!("get_google_user_info error: {}", err))
+                }
+            }
+        }
+        Err(err) => HttpResponse::InternalServerError().body(format!("access_token error: {}", err)),
     }
 }
 
@@ -88,4 +100,35 @@ fn get_google_oauth_client(google: Google) -> BasicClient {
 
     BasicClient::new(client_id, Some(client_secret), auth_url, Some(token_url))
         .set_redirect_uri(RedirectUrl::new("http://localhost:8090/auth/login".to_string()).unwrap())
+}
+
+async fn get_google_user_info(access_token: &str) -> Result<GoogleUserInfo, reqwest::Error> {
+    let client = Client::new();
+    let response = client
+        .get("https://www.googleapis.com/oauth2/v3/userinfo")
+        .bearer_auth(access_token)
+        .send()
+        .await?;
+
+    if !response.status().is_success() {
+        let status = response.status();
+        eprintln!("Request failed: {}", status);
+    }
+
+    // 此时我们可以安全地消费 response，解析为 JSON
+    let user_info: GoogleUserInfo = response.json().await?;
+
+    Ok(user_info)
+}
+
+#[derive(Deserialize, Serialize, Debug)]
+struct GoogleUserInfo {
+    sub: String,
+    name: String,
+    given_name: Option<String>,
+    family_name: Option<String>,
+    picture: String,
+    email: String,
+    email_verified: bool,
+    locale: Option<String>,
 }
