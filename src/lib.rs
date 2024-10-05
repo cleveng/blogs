@@ -1,4 +1,5 @@
 /// lib.rs
+use actix_cors::Cors;
 use actix_web::{
     guard,
     web::{self, Data},
@@ -11,13 +12,13 @@ use serde::Serialize;
 use std::env;
 use std::process;
 
-
 mod configs;
 mod handler;
 mod middleware;
 mod model;
 mod repository;
 mod schemas;
+mod service;
 
 use crate::configs::config::{init_config, Google};
 use crate::handler::web_handler::not_found;
@@ -95,11 +96,21 @@ pub async fn run() -> std::io::Result<()> {
     };
 
     HttpServer::new(move || {
+        // 允许跨域
+        let cors = Cors::default()
+            .allow_any_origin()
+            .allow_any_method()
+            .allow_any_header()
+            .max_age(3600);
+
         // root route
         let home = web::resource("/")
             .app_data(Data::new(state.clone()))
             .route(web::get().to(root));
 
+        let auth = web::resource("/auth/login")
+            .app_data(Data::new(state.clone()))
+            .route(web::get().to(handler::web_handler::login));
 
         // graphql route
         let graphiql = web::resource("/graphql")
@@ -117,13 +128,14 @@ pub async fn run() -> std::io::Result<()> {
             );
 
         App::new()
+            .wrap(cors)
             .wrap(actix_web::middleware::Logger::default())
             .service(home)
             .service(graphiql)
-            .route("/auth/login", web::get().to(handler::web_handler::login))
+            .service(auth)
             .default_service(web::route().to(not_found))
     })
-        .bind(address)?
-        .run()
-        .await
+    .bind(address)?
+    .run()
+    .await
 }
