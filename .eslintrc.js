@@ -39,6 +39,13 @@ module.exports = {
           caseInsensitive: true
         }
       }
+    ],
+    '@typescript-eslint/no-misused-promises': [
+      'error',
+      {
+        checksConditionals: false,
+        checksVoidReturn: false
+      }
     ]
   }
 }
