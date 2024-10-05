@@ -1,9 +1,9 @@
 'use client'
 
-import React from 'react'
-import { ThemeProvider } from 'next-themes'
 import { Theme } from '@radix-ui/themes'
 import { Provider } from 'jotai'
+import { ThemeProvider } from 'next-themes'
+import React from 'react'
 
 type Props = {
   children: React.ReactNode

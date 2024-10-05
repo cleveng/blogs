@@ -3,12 +3,12 @@ import { NextIntlClientProvider } from 'next-intl'
 import { getLocale, getMessages } from 'next-intl/server'
 import React from 'react'
 
-import DefaultLayout from '@layouts/default'
+import { ApolloWrapper } from '@/app/layouts/ApolloWrapper'
+import DefaultLayout from '@/app/layouts/default'
 
 import type { Metadata } from 'next'
 import './assets/styles/app.scss'
 import './assets/styles/radix-ui.css'
-
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
@@ -27,9 +27,11 @@ export default async function RootLayout({ children }: Readonly<Props>) {
   return (
     <html lang={locale} suppressHydrationWarning>
       <body className={inter.className}>
-        <NextIntlClientProvider messages={messages}>
-          <DefaultLayout>{children}</DefaultLayout>
-        </NextIntlClientProvider>
+        <ApolloWrapper>
+          <NextIntlClientProvider messages={messages}>
+            <DefaultLayout>{children}</DefaultLayout>
+          </NextIntlClientProvider>
+        </ApolloWrapper>
       </body>
     </html>
   )

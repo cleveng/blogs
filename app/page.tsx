@@ -21,7 +21,7 @@ export default function Home() {
   const singer = new Signatory(appid)
 
   const { theme, setTheme } = useTheme()
-  const isDarkMode = theme === 'dark' ?? false
+  const isDarkMode = theme === 'dark'
 
   const toggleDarkMode = () => {
     setTheme(isDarkMode ? 'light' : 'dark')
