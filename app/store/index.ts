@@ -1,29 +1,20 @@
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
 
-// State types
-interface States {
-  count: number
-}
+import { CountSlice, createCountSlice } from './count'
+import { createUserSlice, UserSlice } from './user'
+import { version } from '../config'
 
-// Action types
-interface Actions {
-  increase: () => void
-  decrease: () => void
-}
-
-// useCounterStore
-export const useCountStore = create(
-  persist<States & Actions>(
-    set => ({
-      // States
-      count: 0,
-      // Actions
-      increase: () => set(state => ({ count: state.count + 1 })),
-      decrease: () => set(state => ({ count: state.count - 1 }))
+export const useBoundStore = create<CountSlice & UserSlice>()(
+  persist(
+    (...a) => ({
+      ...createCountSlice(...a),
+      ...createUserSlice(...a)
     }),
     {
-      name: 'count-store',
+      version: parseInt(version.replaceAll('.', ''), 10),
+      name: 'local-storage',
+      partialize: state => ({ value: state.value, loggedIn: state.loggedIn, token: state.token }),
       storage: createJSONStorage(() => localStorage)
     }
   )
