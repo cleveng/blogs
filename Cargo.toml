@@ -20,7 +20,6 @@ tokio-postgres = "0.7.12"
 chrono = { version = "0.4.38", features = ["serde"] }
 deadpool-redis = { version = "0.18.0", features = ["serde"] }
 redis = { version = "0.27.2", default-features = false, features = [] }
-toml = "0.8.19"
 sqlx = { version = "0.8.2", features = ["runtime-async-std"] }
 dotenv = "0.15.0"
 async-graphql = "7.0.11"
@@ -31,9 +30,10 @@ md5 = "0.7.0"
 signatory_kit = "1.0.0"
 futures-util = "0.3.30"
 oauth2 = "4.4.2"
-reqwest = { version = "0.12.7", features = ["json"] }
+reqwest = { version = "0.12.8", features = ["json"] }
 anyhow = "1.0.89"
-actix-cors = "0.6.4"
+actix-cors = "0.7.0"
+dotenvy = { git = "https://github.com/allan2/dotenvy", branch = "master" }
 
 [build-dependencies]
 

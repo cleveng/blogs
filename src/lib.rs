@@ -20,13 +20,12 @@ mod repository;
 mod schemas;
 mod service;
 
-use crate::configs::config::{init_config, Google};
+use crate::configs::config::{Bootstrap, Google};
 use crate::handler::web_handler::not_found;
 use crate::repository::{db, rdb};
 use handler::graphql_handler::{graphql_entry, graphql_playground, schema};
 use handler::web_handler::root;
 use middleware::appid::Appid;
-
 #[derive(Clone)]
 pub struct AppState {
     #[warn(dead_code)]
@@ -49,32 +48,17 @@ struct SuccessResponse<T> {
     code: i64,
 }
 
-struct Config {
-    path: String,
-}
-
-impl Config {
-    fn new(value: &Vec<String>) -> Result<Config, String> {
-        if value.len() != 3 {
-            return Err("Must pass 1 arguments, eg: cargo run -- config **".to_string());
-        }
-        let path = value[2].clone();
-        Ok(Config { path })
-    }
-}
-
 pub async fn run() -> std::io::Result<()> {
     let args: Vec<String> = env::args().collect();
-    let config = Config::new(&args).unwrap_or_else(|err| {
-        println!("ERROR: {err}");
+    let cfg = Bootstrap::new(&args).unwrap_or_else(|err| {
+        warn!("Failed to load .env, error: {err}");
         process::exit(1);
     });
 
-    let conf = init_config(config.path.as_str()).unwrap();
-    let address = conf.get_server_url();
+    let address = cfg.get_server_url();
 
     // 创建数据库连接池
-    let db_pool = match db::get_db_pool(&conf.database).await {
+    let db_pool = match db::get_db_pool(cfg.get_database()).await {
         Ok(pool) => pool,
         Err(e) => {
             panic!("Failed to create database pool: {:?}", e);
@@ -82,7 +66,7 @@ pub async fn run() -> std::io::Result<()> {
     };
 
     // 创建Redis连接池
-    let rdb_pool = match rdb::get_rdb_pool(&conf.redis).await {
+    let rdb_pool = match rdb::get_rdb_pool(cfg.get_redis_url()).await {
         Ok(pool) => pool,
         Err(e) => {
             panic!("Failed to create redis pool: {:?}", e);
@@ -92,7 +76,7 @@ pub async fn run() -> std::io::Result<()> {
     let state: AppState = AppState {
         db_pool: db_pool.clone(),
         rdb_pool: rdb_pool.clone(),
-        google: conf.google.clone(),
+        google: cfg.get_google().clone(),
     };
 
     HttpServer::new(move || {

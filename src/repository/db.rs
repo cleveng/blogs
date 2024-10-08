@@ -6,6 +6,7 @@ use tokio_postgres::NoTls;
 
 pub async fn get_db_pool(config: &Database) -> Result<Pool, Box<dyn Error>> {
     let mut cfg = Config::new();
+
     cfg.user = Some(config.username.clone());
     cfg.password = Some(config.password.clone());
     cfg.host = Some(config.host.clone());
