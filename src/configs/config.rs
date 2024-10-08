@@ -47,6 +47,7 @@ impl Bootstrap {
             google: Google {
                 client_id: env_vars.get("GOOGLE_CLIENT_ID").unwrap().to_string(),
                 client_secret: env_vars.get("GOOGLE_CLIENT_SECRET").unwrap().to_string(),
+                callback_url: env_vars.get("GOOGLE_CALLBACK_URL").unwrap().to_string(),
             },
         })
     }
@@ -88,6 +89,7 @@ pub struct Jwt {
 pub struct Google {
     pub client_id: String,
     pub client_secret: String,
+    pub callback_url: String,
 }
 
 impl Jwt {
