@@ -7,6 +7,7 @@ import { Box, Flex, Skeleton, Text } from '@radix-ui/themes'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import { useEffect } from 'react'
+import { FcGoogle } from 'react-icons/fc'
 
 import { appid } from '@/app/config'
 import { LoginDocument } from '@/app/generated/graphql'
@@ -69,9 +70,9 @@ const Page = () => {
           <a
             target='_self'
             href={loginURL}
-            className='w-full uppercase rounded-sm block text-center border border-gray-400 hover:border-red-600 bg-white px-3.5 py-2.5  hover:bg-red-500 hover:text-white focus:outline-none'
+            className='w-full uppercase rounded-sm flex items-center justify-center border border-gray-400 hover:border-gray-500 hover:shadow bg-white px-3.5 py-2.5 focus:outline-none'
           >
-            Sign In with Google
+            <FcGoogle className='text-xl mr-2' /> Sign In with Google
           </a>
           <div className='pt-10 text-center text-gray-600 dark:text-gray-400'>
             <p className='text-xs'>
