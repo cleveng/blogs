@@ -3,6 +3,8 @@ import { NextIntlClientProvider } from 'next-intl'
 import { getLocale, getMessages } from 'next-intl/server'
 import React from 'react'
 
+import DefaultLayout from '@layouts/default'
+
 import { ApolloWrapper } from '@/app/layouts/ApolloWrapper'
 import DefaultLayout from '@/app/layouts/default'
 
