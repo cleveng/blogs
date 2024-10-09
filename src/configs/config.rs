@@ -8,6 +8,7 @@ pub struct Bootstrap {
     pub database: Database,
     pub redis: Redis,
     pub google: Google,
+    pub jwt: Jwt,
 }
 
 #[derive(Deserialize)]
@@ -47,6 +48,9 @@ impl Bootstrap {
             google: Google {
                 callback_url: env_vars.get("GOOGLE_CALLBACK_URL").unwrap().to_string(),
             },
+            jwt: Jwt {
+                secret: env_vars.get("JWT_SECRET").unwrap().to_string(),
+            },
         })
     }
     pub fn get_server_url(&self) -> String {
@@ -60,6 +64,9 @@ impl Bootstrap {
     }
     pub fn get_google(&self) -> &Google {
         &self.google
+    }
+    pub fn get_jwt(&self) -> &Jwt {
+        &self.jwt
     }
 }
 
@@ -77,7 +84,7 @@ pub struct Redis {
     pub addr: String,
 }
 
-#[derive(Deserialize)]
+#[derive(Deserialize, Clone)]
 pub struct Jwt {
     #[warn(dead_code)]
     pub secret: String,

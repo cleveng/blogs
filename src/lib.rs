@@ -12,7 +12,6 @@ use serde::Serialize;
 use std::env;
 use std::process;
 
-
 mod configs;
 mod handler;
 mod middleware;
@@ -21,7 +20,7 @@ mod repository;
 mod schemas;
 mod service;
 
-use crate::configs::config::{Bootstrap, Google};
+use crate::configs::config::{Bootstrap, Google, Jwt};
 use crate::handler::web_handler::not_found;
 use crate::repository::{db, rdb};
 use handler::graphql_handler::{graphql_entry, graphql_playground, schema};
@@ -36,6 +35,8 @@ pub struct AppState {
     rdb_pool: RedisPool,
     #[warn(dead_code)]
     google: Google,
+    #[warn(dead_code)]
+    jwt: Jwt,
 }
 
 #[derive(Serialize)]
@@ -48,6 +49,16 @@ struct SuccessResponse<T> {
     error: String,
     data: T,
     code: i64,
+}
+
+impl<T> SuccessResponse<T> {
+    pub fn new(data: T) -> Self {
+        SuccessResponse {
+            error: "".to_string(),
+            data,
+            code: 200,
+        }
+    }
 }
 
 pub async fn run() -> std::io::Result<()> {
@@ -79,6 +90,7 @@ pub async fn run() -> std::io::Result<()> {
         db_pool: db_pool.clone(),
         rdb_pool: rdb_pool.clone(),
         google: cfg.get_google().clone(),
+        jwt: cfg.get_jwt().clone(),
     };
 
     HttpServer::new(move || {
@@ -121,7 +133,7 @@ pub async fn run() -> std::io::Result<()> {
             .service(auth)
             .default_service(web::route().to(not_found))
     })
-        .bind(address)?
-        .run()
-        .await
+    .bind(address)?
+    .run()
+    .await
 }

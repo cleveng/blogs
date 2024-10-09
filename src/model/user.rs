@@ -1,10 +1,12 @@
-use crate::model::base::BaseModel;
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct UserModel {
-    pub base: BaseModel,
+    pub id: i32,
+    pub created_at: Option<DateTime<Utc>>,
+    pub updated_at: Option<DateTime<Utc>>,
+    pub deleted_at: Option<DateTime<Utc>>,
     pub email: String,
     pub name: String,
     pub profile_url: Option<String>,
