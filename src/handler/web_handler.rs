@@ -1,9 +1,9 @@
-use crate::configs::config::Google;
-use crate::service::google;
+use crate::service::google::Google;
 use crate::{AppState, ErrorResponse, SuccessResponse};
 use actix_web::web::Data;
 use actix_web::{web, HttpResponse, Responder};
 
+use log::warn;
 use signatory_kit::Signatory;
 use std::collections::HashMap;
 
@@ -57,26 +57,41 @@ pub async fn login(
     state: Data<AppState>,
     query: web::Query<HashMap<String, String>>,
 ) -> impl Responder {
-    let Google {
-        client_id,
-        client_secret,
-        callback_url,
-    } = state.google.clone();
-    let client = google::Google::new(client_id, client_secret, callback_url);
-
-    let code = if let Some(code) = query.get("code") {
-        code
+    // app field
+    let app: String = if let Some(app) = query.get("app") {
+        app.to_string()
     } else {
-        return HttpResponse::Found()
-            .append_header(("Location", client.get_redirect_url()))
-            .finish();
+        String::from("gg")
     };
 
-    let profile = client.get_profile(code.to_string()).await;
-    match profile {
-        Ok(profile) => HttpResponse::Ok().json(profile),
+    // db client
+    let db = match state.db_pool.get().await {
+        Ok(pool) => pool,
         Err(err) => {
-            HttpResponse::InternalServerError().body(format!("get_google_user_info error: {}", err))
+            warn!("Failed to get DB client, {err}");
+            return HttpResponse::InternalServerError().body("The current service is unavailable");
         }
-    }
+    };
+
+    // query account
+    let account: tokio_postgres::Row = match db
+        .query_one("SELECT * FROM accounts WHERE app = $1", &[&app])
+        .await
+    {
+        Ok(row) => row,
+        Err(_) => {
+            return HttpResponse::InternalServerError().body("Failed to query the database");
+        }
+    };
+
+    let client_id: String = account.get("appid");
+    let client_secret: String = account.get("app_secret");
+
+    // NOTE: support other app of platform, eg: wechat, weibo, qq, github
+    let callback_url: String = state.google.callback_url.clone();
+    let client = Google::new(client_id, client_secret, callback_url);
+
+    HttpResponse::Found()
+        .append_header(("Location", client.get_redirect_url()))
+        .finish()
 }

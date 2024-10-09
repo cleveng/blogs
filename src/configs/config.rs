@@ -45,8 +45,6 @@ impl Bootstrap {
                 addr: env_vars.get("REDIS_URL").unwrap().to_string(),
             },
             google: Google {
-                client_id: env_vars.get("GOOGLE_CLIENT_ID").unwrap().to_string(),
-                client_secret: env_vars.get("GOOGLE_CLIENT_SECRET").unwrap().to_string(),
                 callback_url: env_vars.get("GOOGLE_CALLBACK_URL").unwrap().to_string(),
             },
         })
@@ -87,8 +85,6 @@ pub struct Jwt {
 
 #[derive(Deserialize, Clone)]
 pub struct Google {
-    pub client_id: String,
-    pub client_secret: String,
     pub callback_url: String,
 }
 
@@ -96,15 +92,5 @@ impl Jwt {
     #[warn(dead_code)]
     pub fn get_secret(&self) -> String {
         self.secret.clone()
-    }
-}
-
-impl Google {
-    pub fn get_client_id(&self) -> String {
-        self.client_id.clone()
-    }
-
-    pub fn get_client_secret(&self) -> String {
-        self.client_secret.clone()
     }
 }

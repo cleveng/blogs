@@ -1,0 +1,11 @@
+-- Add migration script here
+CREATE TABLE accounts (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR NOT NULL,
+    app VARCHAR NOT NULL UNIQUE,
+    appid VARCHAR NOT NULL UNIQUE,
+    app_secret VARCHAR DEFAULT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    deleted_at TIMESTAMP DEFAULT NULL
+);

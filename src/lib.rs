@@ -12,6 +12,7 @@ use serde::Serialize;
 use std::env;
 use std::process;
 
+
 mod configs;
 mod handler;
 mod middleware;
@@ -26,6 +27,7 @@ use crate::repository::{db, rdb};
 use handler::graphql_handler::{graphql_entry, graphql_playground, schema};
 use handler::web_handler::root;
 use middleware::appid::Appid;
+
 #[derive(Clone)]
 pub struct AppState {
     #[warn(dead_code)]
@@ -119,7 +121,7 @@ pub async fn run() -> std::io::Result<()> {
             .service(auth)
             .default_service(web::route().to(not_found))
     })
-    .bind(address)?
-    .run()
-    .await
+        .bind(address)?
+        .run()
+        .await
 }

@@ -387,12 +387,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "anyhow"
-version = "1.0.89"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "86fdf8605db99b54d3cd748a44c6d04df638eb5dafb219b135d0149bd0db01f6"
-
-[[package]]
 name = "arc-swap"
 version = "1.7.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -776,7 +770,6 @@ version = "1.0.0"
 dependencies = [
  "actix-cors",
  "actix-web",
- "anyhow",
  "async-graphql",
  "async-graphql-actix-web",
  "base64 0.22.1",
@@ -2512,6 +2505,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f66ea23a2d0e5734297357705193335e0a957696f34bed2f2faefacb2fec336f"
 dependencies = [
  "bytes",
+ "chrono",
  "fallible-iterator",
  "postgres-protocol",
 ]
