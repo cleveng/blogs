@@ -1,0 +1,7 @@
+mutation Login($input: String!) {
+  login(payload: $input)
+}
+
+mutation Signup($input: String!) {
+  signup(payload: $input)
+}

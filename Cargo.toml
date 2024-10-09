@@ -1,42 +1,47 @@
 [package]
 name = "blogs"
 version = "1.0.0"
+description = "Rust talent"
+authors = ["cleveng <cleveng@gmail.com>"]
+license = "MIT"
 edition = "2021"
+repository = ""
 rust-version = "1.60.0"
 
 [dependencies]
-tracing = "0.1.40"
-tracing-subscriber = { version = "0.3", default-features = false, features = [
-    "alloc",
-] }
-serde = { version = "1.0.204", features = ["derive"] }
-serde_json = "1.0.120"
-tokio = { version = "1.37.0", features = ["full"] }
-tokio-postgres = "0.7.11"
-grpc = "0.8.3"
-futures = "0.3.30"
-redis = { version = "0.26.0", features = ["tokio-comp"] }
-axum = "0.7.5"
-html = "0.6.3"
-minify-html = "0.15.0"
-async-graphql = "7.0.6"
-mlua = { version = "0.9.8", features = ["lua53", "vendored"] }
-# rust-i18n = "3.0.1"
-# kafka = "0.10.0"
-# teloxide = "0.12.2"
-# async-graphql-actix-web = "7.0.6" # 如果你需要集成到 Actix-web
-# async-graphql-warp = "7.0.6" # 如果你需要集成到 Warp
-# async-graphql-tide = "7.0.6" # 如果你需要集成到 Tide
-async-graphql-axum = "7.0.6"
-image = "0.25.2"
-rusttype = "0.9.3"
-log = "0.4"
-pretty_env_logger = "0.5.0"
-toml = "0.8.16"
-chrono = "0.4.38"
-protobuf = "3.5.0"
+actix-web = "4.9.0"
+deadpool-postgres = "0.14.0"
+env_logger = "0.11.5"
+log = "0.4.22"
+serde = { version = "1.0.210", features = ["derive"] }
+serde_json = "1.0.128"
+tokio = "1.40.0"
+tokio-postgres = { version = "0.7.12", features = ["with-chrono-0_4"] }
+chrono = { version = "0.4.38", features = ["serde"] }
+deadpool-redis = { version = "0.18.0", features = ["serde"] }
+redis = { version = "0.27.2", default-features = false, features = [] }
+sqlx = { version = "0.8.2", features = ["runtime-async-std"] }
+dotenv = "0.15.0"
+async-graphql = "7.0.11"
+async-graphql-actix-web = "7.0.11"
 jsonwebtoken = "9.3.0"
-clap = "4.5.15"
+base64 = "0.22.1"
+md5 = "0.7.0"
+signatory_kit = "1.0.0"
+futures-util = "0.3.30"
+oauth2 = "4.4.2"
+reqwest = { version = "0.12.8", features = ["json"] }
+actix-cors = "0.7.0"
+dotenvy = { git = "https://github.com/allan2/dotenvy", branch = "master" }
 
 [build-dependencies]
-protoc-rust-grpc = "0.8.3"
+
+[profile.dev]
+incremental = true
+
+[profile.release]
+codegen-units = 1
+lto = true
+opt-level = "s"
+panic = "abort"
+strip = true

@@ -20,9 +20,11 @@
     ],
     "paths": {
       "@/*": ["./*"],
-      "@layouts/*": ["layouts/*"]
+      "@layouts/*": ["app/layouts/*"],
+      "@components/*": ["app/components/*"],
+      "@config/*": ["app/config/*"]
     }
   },
-  "include": ["next-env.d.ts", "app/*.ts", "app/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules", "target", "src", "tailwind.config.ts"]
+  "include": ["next-env.d.ts", "app/**/*.ts", "app/**/*.tsx", ".next/types/**/*.ts", "tailwind.config.ts", "codegen.ts"],
+  "exclude": ["node_modules", "target", "src"]
 }

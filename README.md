@@ -1,15 +1,9 @@
-#### Frontend
+## https://crates.io/crates/sqlx-cli
 
-- nextjs
-- tailwindcss
-- radix-ui
+cargo install sqlx-cli --no-default-features --features native-tls,postgres
 
-#### Backend
+#### Cargo run
 
-- rust
-
-#### Deploy
-
-Deploy on Vercel by github workflow ci
-
-#### [Demo](https://blog.cakioe.com)
+```shell
+cargo run -- .env
+```

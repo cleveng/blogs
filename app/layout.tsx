@@ -1,11 +1,16 @@
-import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
-import './assets/styles/app.scss'
-import './assets/styles/radix-ui.css'
-
+import { NextIntlClientProvider } from 'next-intl'
+import { getLocale, getMessages } from 'next-intl/server'
 import React from 'react'
+
 import DefaultLayout from '@layouts/default'
 
+import { ApolloWrapper } from '@/app/layouts/ApolloWrapper'
+import DefaultLayout from '@/app/layouts/default'
+
+import type { Metadata } from 'next'
+import './assets/styles/app.scss'
+import './assets/styles/radix-ui.css'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
@@ -17,11 +22,18 @@ type Props = {
   children: React.ReactNode
 }
 
-export default function RootLayout({ children }: Readonly<Props>) {
+export default async function RootLayout({ children }: Readonly<Props>) {
+  const locale = await getLocale()
+  const messages = await getMessages()
+
   return (
-    <html lang='en' suppressHydrationWarning>
+    <html lang={locale} suppressHydrationWarning>
       <body className={inter.className}>
-        <DefaultLayout>{children}</DefaultLayout>
+        <ApolloWrapper>
+          <NextIntlClientProvider messages={messages}>
+            <DefaultLayout>{children}</DefaultLayout>
+          </NextIntlClientProvider>
+        </ApolloWrapper>
       </body>
     </html>
   )
