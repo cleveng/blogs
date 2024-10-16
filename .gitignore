@@ -165,3 +165,5 @@ src/configs/config.toml
 
 #### bin
 bin/**
+# Sentry Config File
+.env.sentry-build-plugin
