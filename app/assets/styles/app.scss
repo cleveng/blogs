@@ -1,3 +1,11 @@
+// @layer base, antd;
+
+// @layer base {
+
+// }
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
+
+// @wangeditor/editor
+@import './wangeditor';

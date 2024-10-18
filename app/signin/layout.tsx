@@ -2,7 +2,7 @@
 
 import { redirect } from 'next/navigation'
 
-import { useUserStore } from '../store/user'
+import { useUserStore } from '@/app/store/user'
 
 type Props = {
   children: React.ReactNode

@@ -1,7 +1,7 @@
 'use client'
 import { Avatar, DropdownMenu, Flex } from '@radix-ui/themes'
 import Link from 'next/link'
-import { useTranslations } from 'next-intl'
+import { usePathname } from 'next/navigation'
 
 import { useUserStore } from '../store/user'
 
@@ -11,7 +11,9 @@ type Props = {
 
 const Layout = ({ children }: Readonly<Props>) => {
   const logout = useUserStore(state => state.logout)
-  const t = useTranslations('Button')
+  const pathname = usePathname()
+
+  console.log(pathname)
 
   return (
     <>
@@ -21,6 +23,11 @@ const Layout = ({ children }: Readonly<Props>) => {
             <li>
               <Link href='/dashboard/categories' className='underline text-blue-500 hover:text-blue-700'>
                 文章栏目
+              </Link>
+            </li>
+            <li>
+              <Link href='/dashboard/articles' className='underline text-blue-500 hover:text-blue-700'>
+                文章列表
               </Link>
             </li>
           </ul>
@@ -37,11 +44,11 @@ const Layout = ({ children }: Readonly<Props>) => {
               <DropdownMenu.Content>
                 <DropdownMenu.Item>个人设置</DropdownMenu.Item>
                 <DropdownMenu.Separator />
-                <DropdownMenu.Item onClick={logout}>退出</DropdownMenu.Item>
+                <DropdownMenu.Item onClick={() => logout()}>退出</DropdownMenu.Item>
               </DropdownMenu.Content>
             </DropdownMenu.Root>
           </nav>
-          <main className='p-5'>{children}</main>
+          <main>{children}</main>
         </div>
       </Flex>
     </>

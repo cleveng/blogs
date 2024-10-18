@@ -1,4 +1,4 @@
-import { Inter } from 'next/font/google'
+import { AntdRegistry } from '@ant-design/nextjs-registry'
 import { NextIntlClientProvider } from 'next-intl'
 import { getLocale, getMessages } from 'next-intl/server'
 import React from 'react'
@@ -9,7 +9,6 @@ import DefaultLayout from '@/app/layouts/default'
 import type { Metadata } from 'next'
 import './assets/styles/app.scss'
 import './assets/styles/radix-ui.css'
-const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
   title: 'Blogs',
@@ -26,10 +25,12 @@ export default async function RootLayout({ children }: Readonly<Props>) {
 
   return (
     <html lang={locale} suppressHydrationWarning>
-      <body className={inter.className}>
+      <body>
         <ApolloWrapper>
           <NextIntlClientProvider messages={messages}>
-            <DefaultLayout>{children}</DefaultLayout>
+            <DefaultLayout>
+              <AntdRegistry>{children}</AntdRegistry>
+            </DefaultLayout>
           </NextIntlClientProvider>
         </ApolloWrapper>
       </body>
