@@ -2,6 +2,7 @@
 import { Avatar, DropdownMenu, Flex } from '@radix-ui/themes'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import React from 'react'
 
 import { useUserStore } from '../store/user'
 

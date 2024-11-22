@@ -1,8 +1,17 @@
-## https://crates.io/crates/sqlx-cli
+### cargo install
+```bash
+curl https://sh.rustup.rs -sSf | sh
+```
 
+### [sqlx-cli](https://crates.io/crates/sqlx-cli)
+```bash
 cargo install sqlx-cli --no-default-features --features native-tls,postgres
+```
 
-#### Cargo run
+#### Cargo build
+```bash
+cargo build --release
+```
 
 ```shell
 cargo run -- .env
@@ -57,7 +66,6 @@ next build && next export
 https://borstch.com/blog/development/deploying-your-nextjs-14-application-a-step-by-step-guide
 
 更新加锁处理.
-
 
 https://www.gopal-adhikari.com.np/blogs/setting-up-nextjs-14-with-apollo-client-and-codegen-cli
 

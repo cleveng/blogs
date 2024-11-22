@@ -6,8 +6,8 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useTranslations } from 'next-intl'
 
-import LoginForm from '@/app/components/login-form'
-import ThemeSwitch from '@/app/components/theme-switch'
+import LoginForm from '@components/login-form'
+import ThemeSwitch from '@components/theme-switch'
 
 export default function Home() {
   const t = useTranslations('HomePage')

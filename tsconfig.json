@@ -25,6 +25,17 @@
       "@config/*": ["app/config/*"]
     }
   },
-  "include": ["next-env.d.ts", "app/**/*.ts", "app/**/*.tsx", ".next/types/**/*.ts", "tailwind.config.ts", "codegen.ts"],
+  "include": [
+    "next-env.d.ts",
+    "app/**/*.ts",
+    "app/**/*.tsx",
+    ".next/types/**/*.ts",
+    "tailwind.config.ts",
+    "codegen.ts",
+    "sentry.client.config.ts",
+    "sentry.edge.config.ts",
+    "sentry.server.config.ts",
+    "instrumentation.ts"
+  ],
   "exclude": ["node_modules", "target", "src"]
 }

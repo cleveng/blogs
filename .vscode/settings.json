@@ -18,17 +18,8 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "stylelint.validate": ["css", "scss"],
-  "cSpell.words": [
-    "actix",
-    "chrono",
-    "dbname",
-    "deadpool",
-    "graphiql"
-  ],
-  "i18n-ally.localesPaths": [
-    "messages",
-    "src/i18n"
-  ],
+  "cSpell.words": ["actix", "chrono", "dbname", "deadpool", "graphiql"],
+  "i18n-ally.localesPaths": ["messages", "src/i18n"],
   "[ignore]": {
     "editor.defaultFormatter": "foxundermoon.shell-format"
   }
